@@ -12,11 +12,7 @@ namespace AM.Persistence
 {
     public class AutomationDbService : DbContext
     {
-        public AutomationDbService()
-        {
-
-        }
-
+       
         public AutomationDbService(DbContextOptions<AutomationDbService> option) : base(option)
         {
         }

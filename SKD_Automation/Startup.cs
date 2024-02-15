@@ -30,15 +30,14 @@ namespace SKD_Automation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connectionString = "Server = KISHORES - SDT\\PGTSQLEXPRESS,1433; Database = Automation; User id = sa; Password = Indi@345; MultipleActiveResultSets = true";
-            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(connectionString));
-            services.AddScoped<IUnitWorkService, UnitWorkService>();
-
             services.AddControllers();
+
+            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
+            services.AddScoped<IUnitWorkService, UnitWorkService>();
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SKD_Automation", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Automation", Version = "v1" });
             });
         }
 
