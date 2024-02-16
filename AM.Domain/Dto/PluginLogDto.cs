@@ -9,8 +9,11 @@ namespace AM.Domain.Dto
     public class PluginLogDto
     {
         public int PluginLogId { get; set; }
+        public int PluginId { get; set; }
+
         public string JobName { get; set; }
-        public string Description { get; set; }
+        public string Activity { get; set; }
         public int CreatedEmployeeId { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }

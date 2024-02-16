@@ -26,20 +26,20 @@ namespace AM.Persistence
 
         public async Task<int> Commit(CancellationToken cancellationToken = new CancellationToken())
         {
-            //foreach (var entry in _service.ChangeTracker.Entries<AuditableEntity>())
-            //{
-            //    switch (entry.State)
-            //    {
-            //        case EntityState.Added:
-            //            entry.Entity.CreatedDate = COM.GetUtcToLocal();
-            //            break;
-            //        case EntityState.Modified:
-            //            entry.Entity.LastModifiedDate = COM.GetUtcToLocal();
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
+            foreach (var entry in _service.ChangeTracker.Entries<AuditableEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedDate = COM.GetUtcToLocal();
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.LastModifiedDate = COM.GetUtcToLocal();
+                        break;
+                    default:
+                        break;
+                }
+            }
 
             return await _service.SaveChangesAsync(cancellationToken);
         }

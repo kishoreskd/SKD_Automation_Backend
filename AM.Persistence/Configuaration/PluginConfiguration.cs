@@ -18,9 +18,15 @@ namespace RFIM.Persistence.Configuaration
         {
             builder.HasKey(e => e.PluginId);
 
-            builder.Property(e => e.PluginName).HasMaxLength(200);
+            builder.Property(e => e.PluginName).HasMaxLength(200).IsRequired();
 
-            builder.Property(e => e.Description).HasMaxLength(1000);
+            builder.Property(e => e.Description).HasMaxLength(1000).IsRequired();
+
+            builder.Property(e => e.ManualMinutes).IsRequired();
+
+            builder.Property(e => e.AutomatedMinutes).IsRequired();
+
+            builder.Property(e => e.Description).IsRequired();
 
 
             builder.HasMany(e => e.PluginLogCol)

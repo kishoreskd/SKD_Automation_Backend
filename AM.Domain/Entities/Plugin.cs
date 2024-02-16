@@ -13,7 +13,7 @@ namespace AM.Domain.Entities
         public int PluginId { get; set; }
         public string PluginName { get; set; }
         public double ManualMinutes { get; set; }
-        public double AutomatedMinutes { get; set; }
+        public double AutomatedMinutes  { get; set; }
         public string Description { get; set; }
 
         public int DepartmentId { get; set; }

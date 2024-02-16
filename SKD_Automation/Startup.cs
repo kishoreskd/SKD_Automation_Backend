@@ -13,8 +13,12 @@ using System.Threading.Tasks;
 
 using AM.Persistence;
 using Microsoft.EntityFrameworkCore;
-using AM.Domain;
+using FluentValidation.AspNetCore;
 
+using AM.Domain.Validator;
+using System.Reflection;
+using FluentValidation;
+using AM.Domain.Entities;
 
 namespace SKD_Automation
 {
@@ -30,10 +34,11 @@ namespace SKD_Automation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
-
+            services.AddControllers().AddFluentValidation();
+            services.AddFluentValidationValidators();
             services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
             services.AddScoped<IUnitWorkService, UnitWorkService>();
+            services.AddAutoMapper(typeof(Program).Assembly);
 
             services.AddSwaggerGen(c =>
             {
@@ -60,6 +65,17 @@ namespace SKD_Automation
             {
                 endpoints.MapControllers();
             });
+        }
+    }
+
+
+    public static class AddFluentValidationExtension
+    {
+        public static void AddFluentValidationValidators(this IServiceCollection service)
+        {
+            service.AddTransient<IValidator<Department>, DepartmentValidator>();
+            service.AddTransient<IValidator<Plugin>, PluginValidator>();
+            service.AddTransient<IValidator<PluginLog>, PluginLogValidator>();
         }
     }
 }

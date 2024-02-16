@@ -24,9 +24,15 @@ namespace AM.Persistence
             _context.Plugin.Update(obj);
         }
 
-   
+
         public void DetachLocal(List<Plugin> col)
         {
         }
+
+        //public IQueryable<Plugin> GetAllPluginWithChild()
+        //{
+        //    IQueryable<Plugin> plugin = _context.Plugin.Include(e => e.PluginLogCol).Include(e => e.Department);
+        //    return plugin;
+        //}
     }
 }

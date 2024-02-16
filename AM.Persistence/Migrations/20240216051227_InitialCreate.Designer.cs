@@ -4,14 +4,16 @@ using AM.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AM.Persistence.Migrations
 {
     [DbContext(typeof(AutomationDbService))]
-    partial class AutomationDbServiceModelSnapshot : ModelSnapshot
+    [Migration("20240216051227_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,9 +29,7 @@ namespace AM.Persistence.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("DepartmentName")
-                        .IsRequired()
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("DepartmentId");
 
@@ -56,7 +56,6 @@ namespace AM.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -70,7 +69,6 @@ namespace AM.Persistence.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("PluginName")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
@@ -89,7 +87,6 @@ namespace AM.Persistence.Migrations
                         .UseIdentityColumn();
 
                     b.Property<string>("Activity")
-                        .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
@@ -100,7 +97,6 @@ namespace AM.Persistence.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("JobName")
-                        .IsRequired()
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 

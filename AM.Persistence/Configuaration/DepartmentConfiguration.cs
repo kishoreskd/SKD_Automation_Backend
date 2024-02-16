@@ -12,15 +12,13 @@ using AM.Domain.Entities;
 
 namespace RFIM.Persistence.Configuaration
 {
-    public class PluginLogConfiguaration : IEntityTypeConfiguration<PluginLog>
+    public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
     {
-        public void Configure(EntityTypeBuilder<PluginLog> builder)
+        public void Configure(EntityTypeBuilder<Department> builder)
         {
-            builder.HasKey(e => e.PluginLogId);
+            builder.HasKey(e => e.DepartmentId);
 
-            builder.Property(e => e.JobName).HasMaxLength(200);
-
-            builder.Property(e => e.Description).HasMaxLength(1000);
+            builder.Property(e => e.DepartmentName).HasMaxLength(200).IsRequired();
         }
     }
 }

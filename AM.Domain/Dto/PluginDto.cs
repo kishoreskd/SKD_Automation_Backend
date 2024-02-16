@@ -9,14 +9,16 @@ namespace AM.Domain.Dto
     public class PluginDto
     {
         public int PluginId { get; set; }
-        public string Name { get; set; }
-        public double ManualHour { get; set; }
-        public double AutomatedHour { get; set; }
+        public string PluginName { get; set; }
+        public double ManualMinutes { get; set; }
+        public double AutomatedMinutes { get; set; }
         public string Description { get; set; }
         public int CreatedEmployeeId { get; set; }
+        public DateTime CreatedDate { get; set; }
 
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
+
         public List<PluginLogDto> PluginLogs { get; set; }
     }
 }

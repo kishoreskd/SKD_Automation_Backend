@@ -21,13 +21,13 @@ namespace Am.Persistence.Seeding
 
         public async Task SeedAllAsync(CancellationToken cncellationToken = default)
         {
-            if (_service.Plugin.IsAny())
-            {
-                return;
-            }
+            //if (_service.Plugin.IsAny())
+            //{
+            //    return;
+            //}
 
-            await SeedDepartmentAsync(cncellationToken);
-            await SeedPluginAsync(cncellationToken);
+            //await SeedDepartmentAsync(cncellationToken);
+            //await SeedPluginAsync(cncellationToken);
             await SeedPluginLogAsync(cncellationToken);
         }
         public async Task SeedDepartmentAsync(CancellationToken cncellationToken)
@@ -68,22 +68,22 @@ namespace Am.Persistence.Seeding
         {
             var locCol = new[]
             {
-                new PluginLog {  JobName = "#Job1", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
-                new PluginLog {  JobName = "#Job2", CreatedBy = 202,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
-                new PluginLog {  JobName = "#Job3", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 2  },
-                new PluginLog {  JobName = "#Job4", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
-                new PluginLog {  JobName = "#Job5", CreatedBy = 2704,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 3  },
-                new PluginLog {  JobName = "#Job6", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
-                new PluginLog {  JobName = "#Job7", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 4  },
-                new PluginLog {  JobName = "#Job8", CreatedBy = 2706,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
-                new PluginLog {  JobName = "#Job9", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
-                new PluginLog {  JobName = "#Job10", CreatedBy = 2708,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId =5  },
-                new PluginLog {  JobName = "#Job11", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 3  },
-                new PluginLog {  JobName = "#Job12", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 2  },
-                new PluginLog {  JobName = "#Job10", CreatedBy = 2709,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
-                new PluginLog {  JobName = "#Job10", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 5  },
-                new PluginLog {  JobName = "#Job10", CreatedBy = 2703,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 2  },
-                new PluginLog {  JobName = "#Job10", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Description = "-",LastModifiedBy = null, LastModifiedDate = null, PluginLogId = 1  },
+                new PluginLog {  JobName = "#Job1", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job2", CreatedBy = 202,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job3", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
+                new PluginLog {  JobName = "#Job4", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job5", CreatedBy = 2704,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 3  },
+                new PluginLog {  JobName = "#Job6", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job7", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 4  },
+                new PluginLog {  JobName = "#Job8", CreatedBy = 2706,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job9", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job10", CreatedBy = 2708,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId =5  },
+                new PluginLog {  JobName = "#Job11", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 3  },
+                new PluginLog {  JobName = "#Job12", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
+                new PluginLog {  JobName = "#Job10", CreatedBy = 2709,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job10", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 5  },
+                new PluginLog {  JobName = "#Job10", CreatedBy = 2703,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
+                new PluginLog {  JobName = "#Job10", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
             };
 
             await _service.PluginLog.AddRange(locCol);

@@ -21,9 +21,8 @@ namespace AM.Persistence
 
         public void Update(Department obj)
         {
+
             _service.Department.Update(obj);
         }
-
-      
     }
 }
