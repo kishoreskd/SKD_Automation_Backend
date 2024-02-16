@@ -24,8 +24,6 @@ namespace SKD_Automation.Controllers
 
         public DepartmentController(IUnitWorkService service, IMapper mapper, IValidator<Department> validator)
         {
-
-
             _service = service;
             _mapper = mapper;
             _validator = validator;
@@ -34,26 +32,17 @@ namespace SKD_Automation.Controllers
         [HttpGet("get_all")]
         public async Task<IActionResult> GetAll()
         {
-            try
+            //SeedingSampleData d = new SeedingSampleData(_service);
+            //await d.SeedAllAsync();
+            IEnumerable<Department> departmentCol = await _service.Department.GetAll();
+
+            if (!COM.IsAny(departmentCol))
             {
-                //SeedingSampleData d = new SeedingSampleData(_service);
-                //await d.SeedAllAsync();
-
-                IEnumerable<Department> departmentCol = await _service.Department.GetAll();
-
-                if (!COM.IsAny(departmentCol))
-                {
-                    return NotFound();
-                }
-
-                return Ok(departmentCol);
+                return NotFound();
             }
-            catch (Exception ex)
-            {
-                string e = ex.Message;
 
-                throw;
-            }
+            return Ok(departmentCol);
+
         }
 
         [HttpGet("get/{id}")]
@@ -61,7 +50,7 @@ namespace SKD_Automation.Controllers
         {
             Department dep = await _service.Department.GetFirstOrDefault(e => e.DepartmentId.Equals(id));
 
-            if (COM.IsNull(dep))    
+            if (COM.IsNull(dep))
             {
                 return NotFound();
             }

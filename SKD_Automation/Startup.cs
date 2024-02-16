@@ -19,6 +19,9 @@ using AM.Domain.Validator;
 using System.Reflection;
 using FluentValidation;
 using AM.Domain.Entities;
+using System.Net;
+using Microsoft.AspNetCore.Diagnostics;
+using SKD_Automation.Middlewares;
 
 namespace SKD_Automation
 {
@@ -36,6 +39,7 @@ namespace SKD_Automation
         {
             services.AddControllers().AddFluentValidation();
             services.AddFluentValidationValidators();
+
             services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
             services.AddScoped<IUnitWorkService, UnitWorkService>();
             services.AddAutoMapper(typeof(Program).Assembly);
@@ -50,14 +54,21 @@ namespace SKD_Automation
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //This below is the custom middleware for handling exception globally for dev and production
+            app.UseMiddleware<ExceptionMiddleware>();
+
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SKD_Automation v1"));
             }
 
+
             app.UseRouting();
+
+
+            //It will allow diffent domain can access 
+            app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 
