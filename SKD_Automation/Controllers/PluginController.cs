@@ -93,7 +93,6 @@ namespace SKD_Automation.Controllers
                 return BadRequest(vResult);
             }
 
-            plgn.LastModifiedBy = id;
             _service.Plugin.Update(plgn);
             await _service.Commit();
             return StatusCode(200);

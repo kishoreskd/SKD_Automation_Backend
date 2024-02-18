@@ -21,13 +21,13 @@ namespace Am.Persistence.Seeding
 
         public async Task SeedAllAsync(CancellationToken cncellationToken = default)
         {
-            //if (_service.Plugin.IsAny())
-            //{
-            //    return;
-            //}
+            if (_service.Plugin.IsAny())
+            {
+                return;
+            }
 
-            //await SeedDepartmentAsync(cncellationToken);
-            //await SeedPluginAsync(cncellationToken);
+            await SeedDepartmentAsync(cncellationToken);
+            await SeedPluginAsync(cncellationToken);
             await SeedPluginLogAsync(cncellationToken);
         }
         public async Task SeedDepartmentAsync(CancellationToken cncellationToken)

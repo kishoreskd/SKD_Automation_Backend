@@ -40,7 +40,9 @@ namespace SKD_Automation
             services.AddControllers().AddFluentValidation();
             services.AddFluentValidationValidators();
 
-            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
+            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
+            //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
+
             services.AddScoped<IUnitWorkService, UnitWorkService>();
             services.AddAutoMapper(typeof(Program).Assembly);
 

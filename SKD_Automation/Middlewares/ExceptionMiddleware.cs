@@ -38,7 +38,7 @@ namespace SKD_Automation.Middlewares
 
                 if (_env.IsDevelopment())
                 {
-                    response = new ApiError.ApiError((int)sc, ex.Message, ex.StackTrace.ToString(), ex.InnerException.ToString());
+                    response = new ApiError.ApiError((int)sc, ex.Message, ex.StackTrace.ToString(), ex.InnerException?.ToString());
                 }
                 else
                 {

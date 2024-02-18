@@ -42,6 +42,20 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
+        [HttpGet("get_all/{pluginId}")]
+        public async Task<IActionResult> GetAllPluginLog(int pluginId)
+        {
+            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e => e.PluginId.Equals(pluginId));
+            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
+
+            if (!COM.IsAny(dto))
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
+
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetSelected(int id)
         {

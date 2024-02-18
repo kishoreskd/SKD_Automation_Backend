@@ -32,8 +32,8 @@ namespace SKD_Automation.Controllers
         [HttpGet("get_all")]
         public async Task<IActionResult> GetAll()
         {
-            //SeedingSampleData d = new SeedingSampleData(_service);
-            //await d.SeedAllAsync();
+            SeedingSampleData d = new SeedingSampleData(_service);
+            await d.SeedAllAsync();
             IEnumerable<Department> departmentCol = await _service.Department.GetAll();
 
             if (!COM.IsAny(departmentCol))

@@ -13,7 +13,10 @@ namespace AM.Domain.Dto
 
         public string JobName { get; set; }
         public string Activity { get; set; }
+
         public int CreatedEmployeeId { get; set; }
+        public int? LastModifiedEmployeeId { get; set; }
+
         public DateTime CreatedDate { get; set; }
     }
 }

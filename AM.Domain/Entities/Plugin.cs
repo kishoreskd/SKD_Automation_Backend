@@ -16,6 +16,8 @@ namespace AM.Domain.Entities
         public double AutomatedMinutes  { get; set; }
         public string Description { get; set; }
 
+
+
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
         public List<PluginLog> PluginLogCol { get; set; }

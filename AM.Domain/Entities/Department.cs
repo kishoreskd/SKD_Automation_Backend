@@ -13,3 +13,4 @@ namespace AM.Domain.Entities
         public string DepartmentName { get; set; }
     }
 }
+    

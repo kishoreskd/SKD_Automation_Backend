@@ -18,6 +18,8 @@ namespace SKD_Automation.Mapping.Configuration
         {
             CreateMap<PluginLog, PluginLogDto>()
                 .ForMember(e => e.CreatedEmployeeId, opt => opt.MapFrom(x => x.CreatedBy))
+                .ForMember(e => e.LastModifiedEmployeeId, opt => opt.MapFrom(x => x.LastModifiedBy))
+
                 .ReverseMap();
         }
     }
