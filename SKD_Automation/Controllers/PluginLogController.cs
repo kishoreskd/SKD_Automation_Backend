@@ -82,6 +82,13 @@ namespace SKD_Automation.Controllers
                 return BadRequest(vResult);
             }
 
+            Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(dto.PluginId));
+
+            if (COM.IsNull(plgn))
+            {
+                return NotFound();
+            }
+
             plgnLog.CreatedBy = dto.CreatedBy;
             plgnLog.CreatedDate = dto.CreatedDate;
 
@@ -94,6 +101,7 @@ namespace SKD_Automation.Controllers
         public async Task<IActionResult> UpdatePluginLog(int id, PluginLogDto dto)
         {
             PluginLog existingPlgnlog = await _service.PluginLog.GetFirstOrDefault(e => e.PluginLogId.Equals(id), noTracking: false);
+
             PluginLog plgnLog = _mapper.Map(dto, existingPlgnlog);
 
             if (COM.IsNull(plgnLog))
@@ -106,6 +114,14 @@ namespace SKD_Automation.Controllers
             if (!vResult.IsValid)
             {
                 return BadRequest(vResult);
+            }
+
+
+            Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(dto.PluginId));
+
+            if (COM.IsNull(plgn))
+            {
+                return NotFound();
             }
 
             plgnLog.LastModifiedBy = dto.LastModifiedBy;
@@ -125,12 +141,12 @@ namespace SKD_Automation.Controllers
                 return NotFound();
             }
 
-            Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(plgnLog.PluginId));
+            //Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(plgnLog.PluginId));
 
-            if (!COM.IsNull(plgn))
-            {
-                throw new DeleteFailureException("Plugin log", id, "There is one plugin is associated with this plugin log!");
-            }
+            //if (!COM.IsNull(plgn))
+            //{
+            //    throw new DeleteFailureException("Plugin log", id, "There is one plugin is associated with this plugin log!");
+            //}
 
             _service.PluginLog.Remove(plgnLog);
             await _service.Commit();
