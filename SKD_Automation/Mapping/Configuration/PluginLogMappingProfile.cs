@@ -16,11 +16,13 @@ namespace SKD_Automation.Mapping.Configuration
     {
         public PluginLogMappingProfile()
         {
-            CreateMap<PluginLog, PluginLogDto>()
-                .ForMember(e => e.CreatedEmployeeId, opt => opt.MapFrom(x => x.CreatedBy))
-                .ForMember(e => e.LastModifiedEmployeeId, opt => opt.MapFrom(x => x.LastModifiedBy))
+            CreateMap<PluginLog, PluginLogDto>().ReverseMap();
 
-                .ReverseMap();
+            CreateMap<PluginLogDto, PluginLog>()
+                .ForMember(e => e.CreatedBy, opt => opt.Ignore())
+                .ForMember(e => e.CreatedDate, opt => opt.Ignore())
+                .ForMember(e => e.LastModifiedBy, opt => opt.Ignore())
+                .ForMember(e => e.LastModifiedDate, opt => opt.Ignore());
         }
     }
 }

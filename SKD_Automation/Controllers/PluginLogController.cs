@@ -10,6 +10,7 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using AM.Domain.Dto;
+using AM.Application.Exceptions;
 
 namespace SKD_Automation.Controllers
 {
@@ -81,6 +82,9 @@ namespace SKD_Automation.Controllers
                 return BadRequest(vResult);
             }
 
+            plgnLog.CreatedBy = dto.CreatedBy;
+            plgnLog.CreatedDate = dto.CreatedDate;
+
             await _service.PluginLog.Add(plgnLog);
             await _service.Commit();
             return StatusCode(200);
@@ -89,8 +93,8 @@ namespace SKD_Automation.Controllers
         [HttpPut("update_pluginlog/{id}")]
         public async Task<IActionResult> UpdatePluginLog(int id, PluginLogDto dto)
         {
-            PluginLog existingPlgn = await _service.PluginLog.GetFirstOrDefault(e => e.PluginLogId.Equals(id));
-            PluginLog plgnLog = _mapper.Map<PluginLog>(dto);
+            PluginLog existingPlgnlog = await _service.PluginLog.GetFirstOrDefault(e => e.PluginLogId.Equals(id), noTracking: false);
+            PluginLog plgnLog = _mapper.Map(dto, existingPlgnlog);
 
             if (COM.IsNull(plgnLog))
             {
@@ -104,8 +108,9 @@ namespace SKD_Automation.Controllers
                 return BadRequest(vResult);
             }
 
-            plgnLog.LastModifiedBy = id;
-            _service.PluginLog.Update(plgnLog);
+            plgnLog.LastModifiedBy = dto.LastModifiedBy;
+            plgnLog.LastModifiedDate = dto.LastModifiedDate;
+
             await _service.Commit();
             return StatusCode(200);
         }
@@ -118,6 +123,13 @@ namespace SKD_Automation.Controllers
             if (COM.IsNull(plgnLog))
             {
                 return NotFound();
+            }
+
+            Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(plgnLog.PluginId));
+
+            if (!COM.IsNull(plgn))
+            {
+                throw new DeleteFailureException("Plugin log", id, "There is one plugin is associated with this plugin log!");
             }
 
             _service.PluginLog.Remove(plgnLog);

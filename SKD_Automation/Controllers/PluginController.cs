@@ -10,6 +10,7 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using AM.Domain.Dto;
+using AM.Application.Exceptions;
 
 namespace SKD_Automation.Controllers
 {
@@ -69,6 +70,9 @@ namespace SKD_Automation.Controllers
                 return BadRequest(vResult);
             }
 
+            plgn.CreatedBy = dto.CreatedBy;
+            plgn.CreatedDate = dto.CreatedDate;
+
             await _service.Plugin.Add(plgn);
             await _service.Commit();
             return StatusCode(200);
@@ -78,8 +82,8 @@ namespace SKD_Automation.Controllers
         [HttpPut("update_plugin/{id}")]
         public async Task<IActionResult> UpdatePlugin(int id, PluginDto dto)
         {
-            Plugin existingPlgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id), includeProp: _plgnIncludeEntities);
-            Plugin plgn = _mapper.Map<Plugin>(dto);
+            Plugin existingPlgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id), includeProp: _plgnIncludeEntities, noTracking: false);
+            Plugin plgn = _mapper.Map(dto, existingPlgn);
 
             if (COM.IsNull(plgn))
             {
@@ -93,7 +97,10 @@ namespace SKD_Automation.Controllers
                 return BadRequest(vResult);
             }
 
-            _service.Plugin.Update(plgn);
+            plgn.LastModifiedBy = dto.LastModifiedBy;
+            plgn.LastModifiedDate = dto.LastModifiedDate;
+
+            //_service.Plugin.Update(plgn);
             await _service.Commit();
             return StatusCode(200);
         }
@@ -102,6 +109,12 @@ namespace SKD_Automation.Controllers
         public async Task<IActionResult> DeletePlugin(int id)
         {
             Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id));
+            PluginLog log = await _service.PluginLog.GetFirstOrDefault(e => e.PluginId.Equals(id));
+
+            if (!COM.IsNull(log))
+            {
+                throw new DeleteFailureException("Plugin log", id, "There are plugin logs are associated with plugin!");
+            }
 
             if (COM.IsNull(plgn))
             {

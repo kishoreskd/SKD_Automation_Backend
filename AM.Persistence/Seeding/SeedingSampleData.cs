@@ -69,7 +69,7 @@ namespace Am.Persistence.Seeding
             var locCol = new[]
             {
                 new PluginLog {  JobName = "#Job1", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "#Job2", CreatedBy = 202,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "#Job2", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
                 new PluginLog {  JobName = "#Job3", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
                 new PluginLog {  JobName = "#Job4", CreatedBy = 2701,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
                 new PluginLog {  JobName = "#Job5", CreatedBy = 2704,CreatedDate = COM.GetUtcToLocal(),Activity = "-",LastModifiedBy = null, LastModifiedDate = null, PluginId = 3  },

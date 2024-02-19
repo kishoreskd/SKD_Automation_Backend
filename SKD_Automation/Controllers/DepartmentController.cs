@@ -14,8 +14,8 @@ using Am.Persistence.Seeding;
 
 namespace SKD_Automation.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class DepartmentController : ControllerBase
     {
         private readonly IUnitWorkService _service;
