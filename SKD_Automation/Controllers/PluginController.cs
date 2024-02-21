@@ -23,6 +23,7 @@ namespace SKD_Automation.Controllers
         private readonly IValidator<Plugin> _validator;
         private readonly string _plgnIncludeEntities;
 
+
         public PluginController(IUnitWorkService service, IMapper mapper, IValidator<Plugin> validator)
         {
             _service = service;
@@ -35,42 +36,7 @@ namespace SKD_Automation.Controllers
         [HttpGet("get_all")]
         public async Task<IActionResult> GetAllPlugin()
         {
-            IEnumerable<Plugin> plugin = await _service.Plugin.GetAll();
-            IEnumerable<PluginDto> dto = plugin.Select(e => _mapper.Map<PluginDto>(e));
-
-            if (!COM.IsAny(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
-        [HttpGet("get_all_with_log/year={year}")]
-        public async Task<IActionResult> GetAllPlugin(int year)
-        {
             IEnumerable<Plugin> plugin = await _service.Plugin.GetAll(includeProp: $"{nameof(Plugin.Department)}");
-            IEnumerable<PluginLog> logs = await _service.PluginLog.Get(e => e.CreatedDate.Year.Equals(year));
-
-            //var v = from p in plugin
-            //        join log in logs
-            //        on p.PluginId equals log.PluginId
-            //        select new Plugin
-            //        {
-            //          PluginId = p.PluginId,
-            //          AutomatedMinutes = p.AutomatedMinutes,
-            //          ManualMinutes = p.ManualMinutes,
-            //          DepartmentId = p.DepartmentId,
-            //          CreatedBy = p.CreatedBy,
-            //          CreatedDate = p.CreatedDate,
-            //          LastModifiedBy = p.LastModifiedBy,
-            //          LastModifiedDate = p.LastModifiedDate,
-            //          Department = p.Department,
-            //          PluginLogCol = logs.ToList(),
-                      
-                      
-            //        };
-
             IEnumerable<PluginDto> dto = plugin.Select(e => _mapper.Map<PluginDto>(e));
 
             if (!COM.IsAny(dto))
@@ -80,21 +46,6 @@ namespace SKD_Automation.Controllers
 
             return Ok(dto);
         }
-
-        [HttpGet("get_all_with_log/month={month}&year={year}")]
-        public async Task<IActionResult> GetAllPlugin(int year, int month)
-        {
-            IEnumerable<Plugin> plugin = await _service.Plugin.GetAll(includeProp: _plgnIncludeEntities);
-            IEnumerable<PluginDto> dto = plugin.Select(e => _mapper.Map<PluginDto>(e));
-
-            if (!COM.IsAny(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
 
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetSelected(int id)
@@ -128,7 +79,6 @@ namespace SKD_Automation.Controllers
             await _service.Commit();
             return StatusCode(200);
         }
-
 
         [HttpPut("update_plugin/{id}")]
         public async Task<IActionResult> UpdatePlugin(int id, PluginDto dto)
@@ -175,6 +125,75 @@ namespace SKD_Automation.Controllers
             _service.Plugin.Remove(plgn);
             await _service.Commit();
             return StatusCode(200);
+        }
+
+
+
+
+
+
+        [HttpGet("get_withlog/pluginId={pluginId}")]
+        public async Task<IActionResult> GetPluginWithLog(int pluginId)
+        {
+            Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
+            PluginDto dto = _mapper.Map<PluginDto>(plugin);
+
+            if (COM.IsNull(dto))
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
+
+
+        [HttpGet("get_withlog_by_monthandyear/departmentid={departmentid}&month={month}&year={year}")]
+        public async Task<IActionResult> GetAllPlugin(int departmentid, int month, int year)
+        {
+            IEnumerable<Plugin> plugin = await _service.Plugin.GetAll(e => e.DepartmentId.Equals(departmentid), includeProp: _plgnIncludeEntities);
+
+            plugin.ToList().ForEach(e =>
+            {
+                e.PluginLogCol = e.PluginLogCol?.Where(e => e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year)).ToList();
+            });
+
+            //plugin.Select(e=> )
+
+            IEnumerable<PluginDto> dto = plugin.Select(e =>
+            {
+                e.PluginLogCol = e.PluginLogCol.Where(x => x.CreatedDate.Year.Equals(year)).ToList();
+                return _mapper.Map<PluginDto>(e);
+            });
+
+            if (!COM.IsAny(dto))
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
+
+
+        [HttpGet("get_withlog_by_year/departmentid={departmentid}&year={year}")]
+        public async Task<IActionResult> GetAllPlugin(int departmentid, int year)
+        {
+            IEnumerable<Plugin> plugin = await _service.Plugin.GetAll(e => e.DepartmentId.Equals(departmentid), includeProp: _plgnIncludeEntities);
+
+            plugin.ToList().ForEach(e =>
+            {
+
+                e.PluginLogCol = e.PluginLogCol?.Where(e => e.CreatedDate.Year.Equals(year)).ToList();
+            });
+
+
+            IEnumerable<PluginDto> dto = plugin.Select(e => _mapper.Map<PluginDto>(e));
+
+            if (!COM.IsAny(dto))
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
         }
     }
 }

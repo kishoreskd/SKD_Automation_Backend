@@ -44,55 +44,6 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("get_all/{pluginId}")]
-        public async Task<IActionResult> GetAllPluginLog(int pluginId)
-        {
-            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e => e.PluginId.Equals(pluginId));
-            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
-
-            if (!COM.IsAny(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
-        [HttpGet("get_all/pluginId={pluginId}&month={month}&year={year}")]
-        public async Task<IActionResult> GetForMonthAndYear(int pluginId, int month, int year)
-        {
-            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e =>
-            e.PluginId.Equals(pluginId) &&
-            e.CreatedDate.Month.Equals(month) &&
-            e.CreatedDate.Year.Equals(year));
-
-            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
-
-            if (!COM.IsAny(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
-        [HttpGet("get_all/pluginId={pluginId}&year={year}")]
-        public async Task<IActionResult> GetForyear(int pluginId, int year)
-        {
-            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e =>
-            e.PluginId.Equals(pluginId) &&
-            e.CreatedDate.Year.Equals(year));
-
-            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
-
-            if (!COM.IsAny(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetSelected(int id)
         {
@@ -187,6 +138,58 @@ namespace SKD_Automation.Controllers
             _service.PluginLog.Remove(plgnLog);
             await _service.Commit();
             return StatusCode(200);
+        }
+
+
+
+
+        [HttpGet("get_by_plugin/{pluginId}")]
+        public async Task<IActionResult> GetAllPluginLog(int pluginId)
+        {
+            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e => e.PluginId.Equals(pluginId));
+            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
+
+            if (!COM.IsAny(dto))
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
+
+        [HttpGet("get_by_monthandyear/pluginId={pluginId}&month={month}&year={year}")]
+        public async Task<IActionResult> GetForMonthAndYear(int pluginId, int month, int year)
+        {
+            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e =>
+            e.PluginId.Equals(pluginId) &&
+            e.CreatedDate.Month.Equals(month) &&
+            e.CreatedDate.Year.Equals(year));
+
+            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
+
+            if (!COM.IsAny(dto))
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
+        }
+
+        [HttpGet("get_by_year/pluginId={pluginId}&year={year}")]
+        public async Task<IActionResult> GetForyear(int pluginId, int year)
+        {
+            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e =>
+            e.PluginId.Equals(pluginId) &&
+            e.CreatedDate.Year.Equals(year));
+
+            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
+
+            if (!COM.IsAny(dto))
+            {
+                return NotFound();
+            }
+
+            return Ok(dto);
         }
     }
 }

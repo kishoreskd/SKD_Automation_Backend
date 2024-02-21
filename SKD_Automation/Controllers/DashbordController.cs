@@ -1,112 +1,68 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 
 using AM.Domain.Entities;
 using AM.Persistence;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using AM.Domain.Dto;
-using AM.Application.Exceptions;
+using Am.Persistence.Seeding;
 
 namespace SKD_Automation.Controllers
 {
-    [ApiController]
     [Route("[controller]")]
+    [ApiController]
     public class DashbordController : ControllerBase
     {
         private readonly IUnitWorkService _service;
         private readonly IMapper _mapper;
-        private readonly IValidator<PluginLog> _validator;
+        private readonly IValidator<Department> _validator;
+        private readonly string _plgnIncludeEntities;
 
-        public DashbordController(IUnitWorkService service, IMapper mapper, IValidator<PluginLog> validator)
+        public DashbordController(IUnitWorkService service, IMapper mapper, IValidator<Department> validator)
         {
             _service = service;
             _mapper = mapper;
             _validator = validator;
+            _plgnIncludeEntities = $"{nameof(Plugin.Department)},{nameof(Plugin.PluginLogCol)}";
         }
-
 
         [HttpGet("get_all")]
-        public async Task<IActionResult> GetAllPluginLog()
+        public async Task<IActionResult> GetAll()
         {
-            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll();
-            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
+            IEnumerable<Plugin> pCol = await _service.Plugin.GetAll(includeProp: _plgnIncludeEntities);
 
-            if (!COM.IsAny(dto))
+            //List<Dashbord> dCol = pCol.Select((e, i) => new Dashbord
+            //{
+            //    totalPlugins = pCol.Count()
+            //    totalAutomatedMinutes = e.AutomatedMinutes * e.PluginLogCol.Count,
+            //    totalManualMiniutes = e.ManualMinutes * e.PluginLogCol.Count
+
+            //}).ToList();
+
+            double mMinutes = 0;
+            double aMinutes = 0;
+
+            foreach (Plugin plgn in pCol)
             {
-                return NotFound();
+                aMinutes += plgn.AutomatedMinutes * plgn.PluginLogCol.Count;
+                mMinutes += plgn.ManualMinutes * plgn.PluginLogCol.Count;
             }
 
-            return Ok(dto);
-        }
-
-        [HttpGet("get/{pluginId}")]
-        public async Task<IActionResult> GetAllPluginLog(int pluginId)
-        {
-            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e => e.PluginId.Equals(pluginId));
-            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
-
-            if (!COM.IsAny(dto))
+            Dashbord d = new Dashbord
             {
-                return NotFound();
-            }
+                totalPlugins = pCol.Count(),
+                totalManualMiniutes = mMinutes,
+                totalAutomatedMinutes = aMinutes
+            };
 
-            return Ok(dto);
+            return Ok(d);
         }
 
-        [HttpGet("get_all/pluginId={pluginId}&month={month}&year={year}")]
-        public async Task<IActionResult> GetForMonthAndYear(int pluginId, int month, int year)
-        {
-            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e =>
-            e.PluginId.Equals(pluginId) &&
-            e.CreatedDate.Month.Equals(month) &&
-            e.CreatedDate.Year.Equals(year));
-
-            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
-
-            if (!COM.IsAny(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
-        [HttpGet("get_all/pluginId={pluginId}&year={year}")]
-        public async Task<IActionResult> GetForyear(int pluginId, int year)
-        {
-            IEnumerable<PluginLog> pluginLog = await _service.PluginLog.GetAll(e =>
-            e.PluginId.Equals(pluginId) &&
-            e.CreatedDate.Year.Equals(year));
-
-            IEnumerable<PluginLogDto> dto = pluginLog.Select(e => _mapper.Map<PluginLogDto>(e));
-
-            if (!COM.IsAny(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
-        [HttpGet("get/{id}")]
-        public async Task<IActionResult> GetSelected(int id)
-        {
-            PluginLog plgnLog = await _service.PluginLog.GetFirstOrDefault(e => e.PluginLogId.Equals(id));
-            PluginLogDto dto = _mapper.Map<PluginLogDto>(plgnLog);
-
-            if (COM.IsNull(dto))
-            {
-                return NotFound();
-            }
-
-            return Ok(dto);
-        }
-
-  
     }
 }
