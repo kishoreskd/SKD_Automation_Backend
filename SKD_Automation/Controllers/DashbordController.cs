@@ -32,10 +32,10 @@ namespace SKD_Automation.Controllers
             _plgnIncludeEntities = $"{nameof(Plugin.Department)},{nameof(Plugin.PluginLogCol)}";
         }
 
-        [HttpGet("get_all")]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("get_all/departmentid={departmentid}")]
+        public async Task<IActionResult> GetAll(int departmentid)
         {
-            IEnumerable<Plugin> pCol = await _service.Plugin.GetAll(includeProp: _plgnIncludeEntities);
+            IEnumerable<Plugin> pCol = await _service.Plugin.GetAll(e => e.DepartmentId.Equals(departmentid), includeProp: _plgnIncludeEntities);
 
             //List<Dashbord> dCol = pCol.Select((e, i) => new Dashbord
             //{
@@ -63,6 +63,5 @@ namespace SKD_Automation.Controllers
 
             return Ok(d);
         }
-
     }
 }
