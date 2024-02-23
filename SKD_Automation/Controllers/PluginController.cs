@@ -130,6 +130,9 @@ namespace SKD_Automation.Controllers
 
 
 
+
+
+
         [HttpGet("departments/{departmentid}")]
         public async Task<IActionResult> GetByDepartment(int departmentid)
         {
