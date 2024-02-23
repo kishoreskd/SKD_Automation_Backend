@@ -33,7 +33,7 @@ namespace SKD_Automation.Controllers
         }
 
 
-        [HttpGet("get_all")]
+        [HttpGet("plugins/all")]
         public async Task<IActionResult> GetAllPlugin()
         {
             IEnumerable<Plugin> plugin = await _service.Plugin.GetAll(includeProp: $"{nameof(Plugin.Department)}");
@@ -47,7 +47,7 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("get/{id}")]
+        [HttpGet("plugin/get/{id}")]
         public async Task<IActionResult> GetSelected(int id)
         {
             Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id), includeProp: _plgnIncludeEntities);
@@ -61,7 +61,7 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
-        [HttpPost("add_plugin")]
+        [HttpPost("plugin/post")]
         public async Task<IActionResult> AddPlugin(PluginDto dto)
         {
             Plugin plgn = _mapper.Map<Plugin>(dto);
@@ -80,7 +80,7 @@ namespace SKD_Automation.Controllers
             return StatusCode(200);
         }
 
-        [HttpPut("update_plugin/{id}")]
+        [HttpPut("plugin/put/{id}")]
         public async Task<IActionResult> UpdatePlugin(int id, PluginDto dto)
         {
             Plugin existingPlgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id), includeProp: _plgnIncludeEntities, noTracking: false);
@@ -106,7 +106,7 @@ namespace SKD_Automation.Controllers
             return StatusCode(200);
         }
 
-        [HttpDelete("remove/{id}")]
+        [HttpDelete("plugin/delete/{id}")]
         public async Task<IActionResult> DeletePlugin(int id)
         {
             Plugin plgn = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id));
@@ -130,10 +130,7 @@ namespace SKD_Automation.Controllers
 
 
 
-
-
-
-        [HttpGet("get_by_department/departmentid={departmentid}")]
+        [HttpGet("departments/{departmentid}")]
         public async Task<IActionResult> GetByDepartment(int departmentid)
         {
             IEnumerable<Plugin> plugin = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentid));
@@ -147,7 +144,7 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("get_withlog/pluginId={pluginId}")]
+        [HttpGet("plugin/{pluginId}/log")]
         public async Task<IActionResult> GetPluginWithLog(int pluginId)
         {
             Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
@@ -161,7 +158,7 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("get_withlog_by_monthyear/pluginId={pluginId}&month={month}&year={year}")]
+        [HttpGet("plugin/{pluginId}/log/{month}/{year}")]
         public async Task<IActionResult> GetPluginWithLogByMonthYear(int pluginId, int month, int year)
         {
             Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
@@ -181,7 +178,7 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
-        [HttpGet("get_all_withlog_by_monthandyear/departmentid={departmentid}&month={month}&year={year}")]
+        [HttpGet("plugins/{departmentid}/log/{month}/{year}")]
         public async Task<IActionResult> GetAllPlugin(int departmentid, int month, int year)
         {
             IEnumerable<Plugin> plugin = await _service.Plugin.GetAll(e => e.DepartmentId.Equals(departmentid), includeProp: _plgnIncludeEntities);
@@ -209,7 +206,7 @@ namespace SKD_Automation.Controllers
 
         //return this._http.get<Plugin[]>(`Plugin/get_withlog_by_year/pluginId{pluginId}$&year=${year}`);
 
-        [HttpGet("get_withlog_by_year/pluginId={pluginId}&year={year}")]
+        [HttpGet("plugin/{pluginId}/log/{year}")]
         public async Task<IActionResult> GetAllPlugin(int pluginId, int year)
         {
             Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
