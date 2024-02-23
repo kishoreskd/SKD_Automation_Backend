@@ -147,7 +147,6 @@ namespace SKD_Automation.Controllers
             return Ok(dto);
         }
 
-
         [HttpGet("get_withlog/pluginId={pluginId}")]
         public async Task<IActionResult> GetPluginWithLog(int pluginId)
         {
