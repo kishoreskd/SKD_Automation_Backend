@@ -20,6 +20,8 @@ namespace AM.Persistence
         public DbSet<Department> Department { get; set; }
         public DbSet<Plugin> Plugin { get; set; }
         public DbSet<PluginLog> PluginLog { get; set; }
+        public DbSet<Role> Role { get; set; }
+        public DbSet<Login> Login { get; set; }
 
     
         protected override void OnModelCreating(ModelBuilder builder)

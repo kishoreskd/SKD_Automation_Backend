@@ -128,11 +128,6 @@ namespace SKD_Automation.Controllers
         }
 
 
-
-
-
-
-
         [HttpGet("departments/{departmentid}")]
         public async Task<IActionResult> GetByDepartment(int departmentid)
         {
@@ -206,7 +201,7 @@ namespace SKD_Automation.Controllers
 
             return Ok(dto);
         }
-
+            
         //return this._http.get<Plugin[]>(`Plugin/get_withlog_by_year/pluginId{pluginId}$&year=${year}`);
 
         [HttpGet("plugin/{pluginId}/log/{year}")]

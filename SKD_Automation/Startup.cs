@@ -40,8 +40,8 @@ namespace SKD_Automation
             services.AddControllers().AddFluentValidation();
             services.AddFluentValidationValidators();
 
-            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
             //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
+            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
 
             services.AddScoped<IUnitWorkService, UnitWorkService>();
             services.AddAutoMapper(typeof(Program).Assembly);
@@ -89,6 +89,8 @@ namespace SKD_Automation
             service.AddTransient<IValidator<Department>, DepartmentValidator>();
             service.AddTransient<IValidator<Plugin>, PluginValidator>();
             service.AddTransient<IValidator<PluginLog>, PluginLogValidator>();
+            service.AddTransient<IValidator<Role>, RoleValidator>();
+            service.AddTransient<IValidator<Login>, LoginValidator>();
         }
     }
 }

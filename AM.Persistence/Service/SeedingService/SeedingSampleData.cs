@@ -21,14 +21,16 @@ namespace Am.Persistence.Seeding
 
         public async Task SeedAllAsync(CancellationToken cncellationToken = default)
         {
-            if (_service.Plugin.IsAny())
-            {
-                return;
-            }
+            //if (_service.Plugin.IsAny())
+            //{
+            //    return;
+            //}
 
-            await SeedDepartmentAsync(cncellationToken);
-            await SeedPluginAsync(cncellationToken);
-            await SeedPluginLogAsync(cncellationToken);
+            await this.SeedRoleAsync(cncellationToken);
+
+            //await SeedDepartmentAsync(cncellationToken);
+            //await SeedPluginAsync(cncellationToken);
+            //await SeedPluginLogAsync(cncellationToken);
         }
         public async Task SeedDepartmentAsync(CancellationToken cncellationToken)
         {
@@ -88,6 +90,17 @@ namespace Am.Persistence.Seeding
 
             await _service.PluginLog.AddRange(locCol);
             await _service.Commit();
+        }
+
+        public async Task SeedRoleAsync(CancellationToken cancellationToke)
+        {
+            var col = new[]
+            {
+                new Role {RoleName = "ADMIN"},
+                new Role {RoleName= "MANAGER"},
+                new Role {RoleName = "TEAMLEAD"},
+                new Role {RoleName = "USER"}
+            };
         }
     }
 }

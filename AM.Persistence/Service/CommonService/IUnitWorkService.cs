@@ -15,6 +15,8 @@ namespace AM.Persistence
         IDepartmentService Department { get; }
         IPluginService Plugin { get; }
         IPluginLogService PluginLog { get; }
+        ILoginService Login { get; }
+        IRoleService Role { get; }
 
         Task<int> Commit(CancellationToken cancellationToken = new CancellationToken());
     }

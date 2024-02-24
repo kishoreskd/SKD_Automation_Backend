@@ -23,6 +23,8 @@ namespace AM.Persistence
         public IDepartmentService Department { get { return new DepartmentService(this._service); } }
         public IPluginService Plugin { get { return new PluginService(this._service); } }
         public IPluginLogService PluginLog { get { return new PluginLogService(this._service); } }
+        public ILoginService Login { get { return new LoginService(this._service); } }
+        public IRoleService Role { get { return new RoleService(this._service); } }
 
         public async Task<int> Commit(CancellationToken cancellationToken = new CancellationToken())
         {
