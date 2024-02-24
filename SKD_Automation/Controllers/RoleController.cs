@@ -15,21 +15,22 @@ using AM.Application.Exceptions;
 
 namespace SKD_Automation.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class RoleController : ControllerBase
     {
         private readonly IUnitWorkService _service;
         private readonly IMapper _mapper;
         private readonly IValidator<Role> _validator;
-        private readonly string _plgnIncludeEntities;
 
-        public RoleController()
+        public RoleController(IUnitWorkService service, IMapper mapper, IValidator<Role> validator)
         {
-
+            _service = service;
+            _mapper = mapper;
+            _validator = validator;
         }
 
-        [HttpGet("roles/all")]
+        [HttpGet("roles")]
         public async Task<IActionResult> GetAllPlugin()
         {
             IEnumerable<Role> roles = await _service.Role.GetAll();
@@ -42,7 +43,7 @@ namespace SKD_Automation.Controllers
             return Ok(roles);
         }
 
-        [HttpGet("role/get/{id}")]
+        [HttpGet("get/{id}")]
         public async Task<IActionResult> GetSelected(int id)
         {
             Role role = await _service.Role.GetFirstOrDefault(e => e.Id.Equals(id));
@@ -55,7 +56,7 @@ namespace SKD_Automation.Controllers
             return Ok(role);
         }
 
-        [HttpPost("role/post")]
+        [HttpPost("post")]
         public async Task<IActionResult> AddPlugin(Role role)
         {
             ValidationResult vResult = _validator.Validate(role);
@@ -70,7 +71,7 @@ namespace SKD_Automation.Controllers
             return StatusCode(200);
         }
 
-        [HttpPut("role/put/{id}")]
+        [HttpPut("put/{id}")]
         public async Task<IActionResult> UpdatePlugin(int id, Role role)
         {
             Role exstingRole = await _service.Role.GetFirstOrDefault(e => e.Id.Equals(id), noTracking: false);
@@ -94,7 +95,7 @@ namespace SKD_Automation.Controllers
             return StatusCode(200);
         }
 
-        [HttpDelete("role/delete/{id}")]
+        [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             Role role = await _service.Role.GetFirstOrDefault(e => e.Id.Equals(id));

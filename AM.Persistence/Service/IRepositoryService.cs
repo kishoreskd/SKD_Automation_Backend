@@ -18,6 +18,7 @@ namespace AM.Persistence
         Task Add(T entity, CancellationToken cancelationToken = default);
         Task AddRange(IEnumerable<T> entity, CancellationToken cancelationToken = default);
         bool IsAny();
+        Task<bool> IsAnyAsync(Expression<Func<T, bool>> filter, string includeProp = null, bool noTracking = true, CancellationToken cancelationToken = default);
         void Remove(T entity, string includeprop = null, bool tracking = false);
         void RemoveRange(IEnumerable<T> entities, string includProp = null);
         Task<IEnumerable<T>> GetFilterData(Expression<Func<T, bool>> filter = null, string prop = null, string val = null, string includeprop = null, CancellationToken cancelationToken = default);

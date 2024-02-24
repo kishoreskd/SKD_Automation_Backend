@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace SKD_Automation.ApiError
+namespace SKD_Automation
 {
     public class ApiError
     {
@@ -14,6 +14,11 @@ namespace SKD_Automation.ApiError
             ErrorMessage = errorMessage;
             ErrorDetails = errorDetails;
             InnerException = innerException;
+        }
+
+        public ApiError()
+        {
+
         }
 
         public int ErrorCode { get; set; }

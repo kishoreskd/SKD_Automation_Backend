@@ -189,6 +189,14 @@ namespace AM.Persistence
 
             return await query.ToListAsync(cancelationToken);
         }
+
+        public async Task<bool> IsAnyAsync(Expression<Func<T, bool>> filter, string includeProp = null, bool noTracking = true, CancellationToken cancelationToken = default)
+        {
+            return await _dbSet.AnyAsync(filter);
+        }
+
+
+
         #endregion
 
 
@@ -348,6 +356,7 @@ namespace AM.Persistence
 
             return query;
         }
+
 
         #endregion
     }
