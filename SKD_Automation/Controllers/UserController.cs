@@ -39,7 +39,7 @@ namespace SKD_Automation.Controllers
         [HttpGet("users")]
         public async Task<IActionResult> GetAll()
         {
-                    IEnumerable<User> users = await _service.User.GetAll(includeProp: $"{nameof(AM.Domain.Entities.Role)}");
+            IEnumerable<User> users = await _service.User.GetAll(includeProp: $"{nameof(AM.Domain.Entities.Role)}");
             IEnumerable<UserDto> dtos = users.Select(e => _mapper.Map<UserDto>(e));
 
             if (!COM.IsAny(dtos))
@@ -89,10 +89,11 @@ namespace SKD_Automation.Controllers
             return Ok(usr);
         }
 
-        [HttpPut("put/register")]
+        [HttpPut("put/register/{userId}")]
         public async Task<IActionResult> Update(int userId, UserDto dto)
         {
             User existinguser = await _service.User.GetFirstOrDefault(e => e.Id.Equals(userId), noTracking: false);
+            string existingUserName = existinguser.UserName;
             User usr = _mapper.Map(dto, existinguser);
 
             if (COM.IsNull(usr))
@@ -107,14 +108,19 @@ namespace SKD_Automation.Controllers
                 return BadRequest(result);
             }
 
-            if (await CheckUserNameExistAsync(usr.UserName))
+            if (!existingUserName.Equals(usr.UserName))
             {
-                return BadRequest(new ApiError
+                if (await CheckUserNameExistAsync(usr.UserName))
                 {
-                    ErrorCode = 400,
-                    ErrorMessage = "User Name already exist!"
-                });
+                    return BadRequest(new ApiError
+                    {
+                        ErrorCode = 400,
+                        ErrorMessage = "User Name already exist!"
+                    });
+                }
             }
+
+
 
             string passMsg = PasswordHelper.CheckPasswordStrength(usr.Password);
 
