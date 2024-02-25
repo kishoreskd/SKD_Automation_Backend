@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace AM.Domain.Entities
 {
-    public class Role
+    public class Role : AuditableEntity
     {
-        public int Id { get; set; }
+        public int RoleId { get; set; }
         public string RoleName { get; set; }
     }
 }

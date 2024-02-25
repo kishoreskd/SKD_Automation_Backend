@@ -22,6 +22,9 @@ using AM.Domain.Entities;
 using System.Net;
 using Microsoft.AspNetCore.Diagnostics;
 using SKD_Automation.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace SKD_Automation
 {
@@ -42,6 +45,7 @@ namespace SKD_Automation
 
             //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
             services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
+            services.AddJWTTokenAuthentication();
 
             services.AddScoped<IUnitWorkService, UnitWorkService>();
             services.AddAutoMapper(typeof(Program).Assembly);
@@ -90,7 +94,33 @@ namespace SKD_Automation
             service.AddTransient<IValidator<Plugin>, PluginValidator>();
             service.AddTransient<IValidator<PluginLog>, PluginLogValidator>();
             service.AddTransient<IValidator<Role>, RoleValidator>();
-            service.AddTransient<IValidator<Login>, LoginValidator>();
+            service.AddTransient<IValidator<User>, UserValidator>();
         }
     }
+
+
+    public static class JWTTokenAuthenticationExtension
+    {
+        public static void AddJWTTokenAuthentication(this IServiceCollection service)
+        {
+            service.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(x =>
+            {
+                x.RequireHttpsMetadata = false;
+                x.SaveToken = true;
+                x.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("PGTINDI@345")),
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
+        }
+    }
+
 }

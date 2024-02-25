@@ -12,13 +12,13 @@ using AM.Domain.Entities;
 
 namespace RFIM.Persistence.Configuaration
 {
-    public class LoginConfiguration : IEntityTypeConfiguration<Login>
+    public class LoginConfiguration : IEntityTypeConfiguration<User>
     {
-        public void Configure(EntityTypeBuilder<Login> builder)
+        public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.EmployeeId).IsRequired();
+            builder.Property(e => e.UserName).IsRequired();
             builder.Property(e => e.Password).IsRequired();
             builder.Property(e => e.Token).HasMaxLength(500);
             builder.Property(e => e.RefreshToken).HasMaxLength(500);
@@ -29,7 +29,7 @@ namespace RFIM.Persistence.Configuaration
     {
         public void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.HasKey(e => e.Id);
+            builder.HasKey(e => e.RoleId);
             builder.Property(e => e.RoleName).HasMaxLength(200);
         }
     }

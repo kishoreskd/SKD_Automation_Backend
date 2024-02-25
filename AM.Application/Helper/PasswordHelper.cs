@@ -50,7 +50,7 @@ namespace Am.Application.Helper
             return true;
         }
 
-        private static string CheckPasswordStrength(string password)
+        public static string CheckPasswordStrength(string password)
         {
             StringBuilder sb = new StringBuilder();
             if (password.Length < 9) sb.Append("Minimum password length should be 8" + Environment.NewLine);

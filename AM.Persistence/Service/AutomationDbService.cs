@@ -12,7 +12,7 @@ namespace AM.Persistence
 {
     public class AutomationDbService : DbContext
     {
-       
+
         public AutomationDbService(DbContextOptions<AutomationDbService> option) : base(option)
         {
         }
@@ -21,9 +21,9 @@ namespace AM.Persistence
         public DbSet<Plugin> Plugin { get; set; }
         public DbSet<PluginLog> PluginLog { get; set; }
         public DbSet<Role> Role { get; set; }
-        public DbSet<Login> Login { get; set; }
+        public DbSet<User> User { get; set; }
 
-    
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfigurationsFromAssembly(typeof(AutomationDbService).Assembly);

@@ -6,8 +6,8 @@ using AM.Domain.Entities;
 
 namespace AM.Persistence
 {
-    public interface ILoginService : IRepositoryService<Login>
+    public interface IUserService : IRepositoryService<User>
     {
-        void Update(Login obj);
+        void Update(User obj);
     }
 }

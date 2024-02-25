@@ -19,20 +19,20 @@ namespace Am.Persistence.Seeding
             this._service = service;
         }
 
-        public async Task SeedAllAsync(CancellationToken cncellationToken = default)
+        public async Task SeedAllAsync(CancellationToken ct = default)
         {
-            //if (_service.Plugin.IsAny())
-            //{
-            //    return;
-            //}
+            if (_service.Plugin.IsAny())
+            {
+                return;
+            }
 
-            await this.SeedRoleAsync(cncellationToken);
 
-            //await SeedDepartmentAsync(cncellationToken);
-            //await SeedPluginAsync(cncellationToken);
-            //await SeedPluginLogAsync(cncellationToken);
+            await SeedDepartmentAsync(ct);
+            await SeedPluginAsync(ct);
+            await SeedPluginLogAsync(ct);
+            await this.SeedRoleAsync(ct);
         }
-        public async Task SeedDepartmentAsync(CancellationToken cncellationToken)
+        public async Task SeedDepartmentAsync(CancellationToken ct)
         {
             var departmentCol = new[]
             {
@@ -46,7 +46,7 @@ namespace Am.Persistence.Seeding
             await _service.Department.AddRange(departmentCol);
             await _service.Commit();
         }
-        public async Task SeedPluginAsync(CancellationToken cncellationToken)
+        public async Task SeedPluginAsync(CancellationToken ct)
         {
             var desCol = new[]
             {
@@ -66,7 +66,7 @@ namespace Am.Persistence.Seeding
             await _service.Plugin.AddRange(desCol);
             await _service.Commit();
         }
-        public async Task SeedPluginLogAsync(CancellationToken cncellationToken)
+        public async Task SeedPluginLogAsync(CancellationToken ct)
         {
             var locCol = new[]
             {
@@ -92,7 +92,7 @@ namespace Am.Persistence.Seeding
             await _service.Commit();
         }
 
-        public async Task SeedRoleAsync(CancellationToken cancellationToke)
+        public async Task SeedRoleAsync(CancellationToken ct)
         {
             var col = new[]
             {
@@ -101,6 +101,9 @@ namespace Am.Persistence.Seeding
                 new Role {RoleName = "TEAMLEAD"},
                 new Role {RoleName = "USER"}
             };
+
+            await _service.Role.AddRange(col);
+            await _service.Commit();
         }
     }
 }

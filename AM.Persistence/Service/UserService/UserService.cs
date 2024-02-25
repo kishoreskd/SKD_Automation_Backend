@@ -10,21 +10,18 @@ using AM.Domain.Entities;
 
 namespace AM.Persistence
 {
-    public class LoginService : RepositoryService<Login>, ILoginService
+    public class UserService : RepositoryService<User>, IUserService
     {
         private readonly AutomationDbService _service;
 
-        public LoginService(AutomationDbService context) : base(context)
+        public UserService(AutomationDbService context) : base(context)
         {
             this._service = context;
         }
 
-        public void Update(Login obj)
+        public void Update(User obj)
         {
-            _service.Login.Update(obj);
+            _service.User.Update(obj);
         }
-
-       
-
     }
 }

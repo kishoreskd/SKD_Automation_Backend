@@ -46,7 +46,7 @@ namespace SKD_Automation.Controllers
         [HttpGet("get/{id}")]
         public async Task<IActionResult> GetSelected(int id)
         {
-            Role role = await _service.Role.GetFirstOrDefault(e => e.Id.Equals(id));
+            Role role = await _service.Role.GetFirstOrDefault(e => e.RoleId.Equals(id));
 
             if (COM.IsNull(role))
             {
@@ -74,7 +74,7 @@ namespace SKD_Automation.Controllers
         [HttpPut("put/{id}")]
         public async Task<IActionResult> UpdatePlugin(int id, Role role)
         {
-            Role exstingRole = await _service.Role.GetFirstOrDefault(e => e.Id.Equals(id), noTracking: false);
+            Role exstingRole = await _service.Role.GetFirstOrDefault(e => e.RoleId.Equals(id), noTracking: false);
 
             if (COM.IsNull(exstingRole))
             {
@@ -98,8 +98,8 @@ namespace SKD_Automation.Controllers
         [HttpDelete("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Role role = await _service.Role.GetFirstOrDefault(e => e.Id.Equals(id));
-            Login login = await _service.Login.GetFirstOrDefault(e => e.RoleId.Equals(id));
+            Role role = await _service.Role.GetFirstOrDefault(e => e.RoleId.Equals(id));
+            User login = await _service.User.GetFirstOrDefault(e => e.RoleId.Equals(id));
 
             if (!COM.IsNull(login))
             {

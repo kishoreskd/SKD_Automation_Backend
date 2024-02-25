@@ -33,16 +33,16 @@ namespace SKD_Automation.Middlewares
             }
             catch (Exception ex)
             {
-                ApiError.ApiError response;
+                ApiError response;
                 HttpStatusCode sc = HttpStatusCode.InternalServerError;
 
                 if (_env.IsDevelopment())
                 {
-                    response = new ApiError.ApiError((int)sc, ex.Message, ex.StackTrace.ToString(), ex.InnerException?.ToString());
+                    response = new ApiError((int)sc, ex.Message, ex.StackTrace.ToString(), ex.InnerException?.ToString());
                 }
                 else
                 {
-                    response = new ApiError.ApiError((int)sc, ex.Message);
+                    response = new ApiError((int)sc, ex.Message);
                 }
 
                 _logger.LogError(ex, ex.Message);

@@ -9,11 +9,11 @@ using FluentValidation;
 
 namespace AM.Domain.Validator
 {
-    public class LoginValidator : AbstractValidator<Login>
+    public class UserValidator : AbstractValidator<User>
     {
-        public LoginValidator()
+        public UserValidator()
         {
-            RuleFor(x => x.EmployeeId).NotEmpty().WithMessage("Employee Id required!");
+            RuleFor(x => x.UserName).NotEmpty().WithMessage("User Name required!");
 
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password required!");
 

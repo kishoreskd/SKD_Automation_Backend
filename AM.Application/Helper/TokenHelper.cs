@@ -15,15 +15,16 @@ namespace AM.Application.Helper
 {
     public class TokenHelper
     {
-        public static string CreateJWTToken(Login login)
+
+        public static string CreateJWTToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("PGTINDI@345");
+            var key = Encoding.ASCII.GetBytes("0670bf97-27bd-42df-b140-408fd7473c9f");
 
             var identity = new ClaimsIdentity(new Claim[]
             {
-                new Claim(ClaimTypes.Role, login.Role.RoleName),
-                new Claim(ClaimTypes.Name,$"{login.EmployeeId}")
+                new Claim(ClaimTypes.Role, user.Role.RoleName),
+                new Claim(ClaimTypes.Name,$"{user.UserName}")
             });
 
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -39,16 +40,16 @@ namespace AM.Application.Helper
             return jwtTokenHandler.WriteToken(token);
         }
 
-        public static string CreateRefreshToken(IEnumerable<Login> logins)
+        public static string CreateRefreshToken(IEnumerable<User> users)
         {
             byte[] tokenBytes = new byte[64];
             RandomNumberGenerator.Create().GetBytes(tokenBytes);
 
             var refreshToken = Convert.ToBase64String(tokenBytes);
 
-            if (logins.Any(e => e.RefreshToken.Equals(refreshToken)))
+            if (users.Any(e => e.RefreshToken != null && e.RefreshToken.Equals(refreshToken)))
             {
-                return CreateRefreshToken(logins);
+                return CreateRefreshToken(users);
             }
 
             return refreshToken;
@@ -56,7 +57,7 @@ namespace AM.Application.Helper
 
         public static ClaimsPrincipal GetPrincipleFromExpiredToken(string token)
         {
-            var key = Encoding.ASCII.GetBytes("PGTINDI@345");
+            var key = Encoding.ASCII.GetBytes("0670bf97-27bd-42df-b140-408fd7473c9f");
 
             var tokenValidationParameters = new TokenValidationParameters
             {
