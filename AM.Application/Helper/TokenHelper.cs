@@ -19,12 +19,13 @@ namespace AM.Application.Helper
         public static string CreateJWTToken(User user)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("0670bf97-27bd-42df-b140-408fd7473c9f");
+            var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
 
             var identity = new ClaimsIdentity(new Claim[]
             {
                 new Claim(ClaimTypes.Role, user.Role.RoleName),
-                new Claim(ClaimTypes.Name,$"{user.UserName}")
+                new Claim(ClaimTypes.Name,user.UserName),
+                new Claim(type: "employeeId", value: $"{user.EmployeeId}")
             });
 
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -47,7 +48,7 @@ namespace AM.Application.Helper
 
             var refreshToken = Convert.ToBase64String(tokenBytes);
 
-            if (users.Any(e => e.RefreshToken != null && e.RefreshToken.Equals(refreshToken)))
+            if (users.Any(e => e.RefreshToken.Equals(refreshToken)))
             {
                 return CreateRefreshToken(users);
             }
@@ -57,7 +58,7 @@ namespace AM.Application.Helper
 
         public static ClaimsPrincipal GetPrincipleFromExpiredToken(string token)
         {
-            var key = Encoding.ASCII.GetBytes("0670bf97-27bd-42df-b140-408fd7473c9f");
+            var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
 
             var tokenValidationParameters = new TokenValidationParameters
             {

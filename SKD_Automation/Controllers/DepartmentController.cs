@@ -11,9 +11,11 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using Am.Persistence.Seeding;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SKD_Automation.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DepartmentController : ControllerBase

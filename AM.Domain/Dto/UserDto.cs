@@ -16,6 +16,8 @@ namespace AM.Domain.Dto
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
 
+        public int? EmployeeId { get; set; }
+
         public int RoleId { get; set; }
         public string RoleName { get; set; }
     }
