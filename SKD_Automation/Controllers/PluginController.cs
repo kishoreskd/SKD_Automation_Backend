@@ -11,9 +11,11 @@ using FluentValidation;
 using FluentValidation.Results;
 using AM.Domain.Dto;
 using AM.Application.Exceptions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SKD_Automation.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class PluginController : ControllerBase

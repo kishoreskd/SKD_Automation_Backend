@@ -34,7 +34,7 @@ namespace SKD_Automation.Controllers
         }
 
 
-        [HttpGet("get_all/departmentid={departmentid}")]
+        [HttpGet("dashbord/{departmentid}")]
         public async Task<IActionResult> GetAll(int departmentid)
         {
             IEnumerable<Plugin> pCol = await _service.Plugin.GetAll(e => e.DepartmentId.Equals(departmentid), includeProp: _plgnIncludeEntities);
@@ -67,10 +67,12 @@ namespace SKD_Automation.Controllers
         }
 
 
-        [HttpGet("get_all_by_monthyear/departmentid={departmentid}&month={month}&year={year}")]
+        [HttpGet("dashbord/{departmentid}/{month}/{year}")]
         public async Task<IActionResult> Get(int departmentId, int month, int year)
         {
-            IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
+            //IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
+
+            IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId), includeProp: _plgnIncludeEntities);
 
             double mMinutes = 0;
             double aMinutes = 0;

@@ -17,9 +17,11 @@ using System.Linq;
 using Am.Persistence.Seeding;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SKD_Automation.Controllers
 {
+    [Authorize]
     [Route("[controller]")]
     [ApiController]
     public class UserController : ControllerBase

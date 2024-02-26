@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 
 namespace SKD_Automation.Controllers
 {
+
     [Route("[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
@@ -78,7 +79,7 @@ namespace SKD_Automation.Controllers
             string username = principal.Identity.Name;
 
             User user = await _service.User
-                .GetFirstOrDefault(e => e.UserName.Equals(Convert.ToInt32(username)), noTracking: false, includeProp: $"{nameof(AM.Domain.Entities.User.Role)}");
+                .GetFirstOrDefault(e => e.UserName.Equals(username), noTracking: false, includeProp: $"{nameof(AM.Domain.Entities.User.Role)}");
 
             if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now) return BadRequest(new ApiError
             {
