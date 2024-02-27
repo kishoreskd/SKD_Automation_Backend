@@ -33,10 +33,10 @@ namespace AM.Persistence
                 switch (entry.State)
                 {
                     case EntityState.Added:
-                        entry.Entity.CreatedDate = COM.GetUtcToLocal();
+                        entry.Entity.CreatedDate = DateTime.UtcNow;
                         break;
                     case EntityState.Modified:
-                        entry.Entity.LastModifiedDate = COM.GetUtcToLocal();
+                        entry.Entity.LastModifiedDate = DateTime.UtcNow;
                         break;
                     default:
                         break;

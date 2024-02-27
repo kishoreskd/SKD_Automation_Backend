@@ -33,7 +33,7 @@ namespace AM.Application.Helper
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = identity,
-                Expires = DateTime.Now.AddSeconds(10),
+                Expires = DateTime.Now.AddHours(1),
                 SigningCredentials = credentials
             };
 

@@ -95,7 +95,7 @@ public class COM
     {
         if (count == null) return false;
         return count > 0;
-    }   
+    }
 
     #endregion
 
@@ -140,6 +140,9 @@ public class COM
     }
 
     public static DateTime GetUtcToLocal() => DateTime.UtcNow.ToLocalTime();
+
+
+
 
     #endregion
 
