@@ -48,7 +48,7 @@ namespace AM.Application.Helper
 
             var refreshToken = Convert.ToBase64String(tokenBytes);
 
-            if (users.Any(e => e.RefreshToken.Equals(refreshToken)))
+            if (users.Any(e => e.RefreshToken != null && e.RefreshToken.Equals(refreshToken)))
             {
                 return CreateRefreshToken(users);
             }

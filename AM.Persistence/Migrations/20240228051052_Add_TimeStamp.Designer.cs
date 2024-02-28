@@ -4,14 +4,16 @@ using AM.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AM.Persistence.Migrations
 {
     [DbContext(typeof(AutomationDbService))]
-    partial class AutomationDbServiceModelSnapshot : ModelSnapshot
+    [Migration("20240228051052_Add_TimeStamp")]
+    partial class Add_TimeStamp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

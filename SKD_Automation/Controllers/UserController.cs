@@ -18,6 +18,8 @@ using Am.Persistence.Seeding;
 using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
+using AM.Application.Exceptions;
+using System.Net;
 
 namespace SKD_Automation.Controllers
 {
@@ -122,8 +124,6 @@ namespace SKD_Automation.Controllers
                 }
             }
 
-
-
             string passMsg = PasswordHelper.CheckPasswordStrength(usr.Password);
 
             if (!COM.IsNullOrEmpty(passMsg)) return BadRequest(new ApiError
@@ -142,6 +142,38 @@ namespace SKD_Automation.Controllers
             return Ok(usr);
         }
 
+        [HttpDelete("delete/{id:int}")]
+        public async Task<IActionResult> DeletePlugin(int id)
+        {
+            User user = await _service.User.GetFirstOrDefault(e => e.Id.Equals(id));
+
+            if (COM.IsNull(user))
+            {
+                return NotFound();
+            }
+
+            bool plugin = await _service.Plugin.IsAnyAsync(e => e.CreatedBy.Equals(user.EmployeeId));
+            bool pluginLog = await _service.PluginLog.IsAnyAsync(e => e.CreatedBy.Equals(user.EmployeeId));
+
+            if (plugin)
+            {
+                //return Content(HttpStatusCode.Conflict, "");
+
+                throw new DeleteFailureException("User", user.EmployeeId, "There are user are associated with plugins!");
+            }
+
+            if (pluginLog)
+            {
+                throw new DeleteFailureException("User", user.EmployeeId, "There are user are associated with plugin log!");
+            }
+
+            _service.User.Remove(user);
+            await _service.Commit();
+            return StatusCode(200);
+        }
+
+
         private async Task<bool> CheckUserNameExistAsync(string userName) => await _service.User.IsAnyAsync(e => e.UserName.Equals(userName));
     }
 }
+

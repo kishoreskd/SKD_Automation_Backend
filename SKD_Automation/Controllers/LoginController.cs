@@ -43,7 +43,7 @@ namespace SKD_Automation.Controllers
             User user = await _service.User.GetFirstOrDefault(e => e.UserName.Equals(obj.UserName), noTracking: false, includeProp: $"{nameof(AM.Domain.Entities.User.Role)}");
             IEnumerable<User> logins = await _service.User.GetAll();
 
-            if (COM.IsNull(user)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "User not found!" });
+            if (COM.IsNull(user)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "User name does not match!" });
 
             if (!PasswordHelper.VerifyPassword(obj.Password, user.Password)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Password is incorrect!" });
 

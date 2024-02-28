@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace AM.Domain.Dto
 {
-    public class PluginDto
+    public class PluginDto : AuditableEntity
     {
         public int PluginId { get; set; }
         public string PluginName { get; set; }
@@ -18,16 +18,6 @@ namespace AM.Domain.Dto
 
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
-
-        public int CreatedBy { get; set; }
-
-
-        [JsonProperty(PropertyName = "createdDate")]
-        [JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime CreatedDate { get; set; }
-
-        public int? LastModifiedBy { get; set; }
-        public DateTime? LastModifiedDate { get; set; }
 
         public List<PluginLogDto> PluginLogs { get; set; }
     }

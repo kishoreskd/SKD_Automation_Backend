@@ -249,6 +249,33 @@ namespace SKD_Automation.Controllers
         //    return Ok(dto);
         //}
 
+
+        //[HttpGet("plugin/{pluginId}/log/day/{date:datetime}")]
+        //public async Task<IActionResult> GetPluginLogByDay(int pluginId, DateTime date)
+        //{
+
+        //    //DateTime date = DateTime.Parse(isoStringDate, null, System.Globalization.DateTimeStyles.RoundtripKind);
+
+        //    //date = date.ToLocalTime();
+
+        //    Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
+
+        //    if (!COM.IsNull(plugin))
+        //    {
+        //        plugin.PluginLogCol = plugin.PluginLogCol?.Where(e => e.CreatedDate.Date.Equals(date.Date)).OrderByDescending(e => e.CreatedDate).ToList();
+        //    }
+
+        //    PluginDto dto = _mapper.Map<PluginDto>(plugin);
+
+        //    if (COM.IsNull(dto))
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    return Ok(dto);
+        //}
+
+
         [HttpGet("plugin/{pluginId}/log/{day}/{month}/{year}")]
         public async Task<IActionResult> GetPluginLogByDay(int pluginId, int day, int month, int year)
         {

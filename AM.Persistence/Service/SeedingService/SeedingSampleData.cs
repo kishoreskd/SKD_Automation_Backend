@@ -21,16 +21,16 @@ namespace Am.Persistence.Seeding
 
         public async Task SeedAllAsync(CancellationToken ct = default)
         {
-            if (_service.Plugin.IsAny())
-            {
-                return;
-            }
+            //if (_service.Plugin.IsAny())
+            //{
+            //    return;
+            //}
 
 
-            await SeedDepartmentAsync(ct);
+            //await SeedDepartmentAsync(ct);
             await SeedPluginAsync(ct);
             await SeedPluginLogAsync(ct);
-            await this.SeedRoleAsync(ct);
+            //await this.SeedRoleAsync(ct);
         }
         public async Task SeedDepartmentAsync(CancellationToken ct)
         {
@@ -48,22 +48,18 @@ namespace Am.Persistence.Seeding
         }
         public async Task SeedPluginAsync(CancellationToken ct)
         {
-            string utcTime = DateTime.UtcNow.ToString();
-            string locTime = DateTime.UtcNow.ToLocalTime().ToString();
-
-
 
             var desCol = new[]
             {
-                new Plugin {  PluginName = "Plugin1", ManualMinutes = 30, AutomatedMinutes = 1, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.UtcNow,
+                new Plugin {  PluginName = "Plugin1", ManualMinutes = 30, AutomatedMinutes = 1, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.Now,
                 LastModifiedBy = null, LastModifiedDate = null},
-                 new Plugin {  PluginName = "Plugin2", ManualMinutes = 30, AutomatedMinutes = 2, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.UtcNow,
+                 new Plugin {  PluginName = "Plugin2", ManualMinutes = 30, AutomatedMinutes = 2, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.Now,
                 LastModifiedBy = null, LastModifiedDate = null},
-                new Plugin {  PluginName = "Plugin3", ManualMinutes = 20, AutomatedMinutes = 1, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.UtcNow,
+                new Plugin {  PluginName = "Plugin3", ManualMinutes = 20, AutomatedMinutes = 1, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.Now,
                 LastModifiedBy = null, LastModifiedDate = null},
-                new Plugin {  PluginName = "Plugin4", ManualMinutes = 20, AutomatedMinutes = 5, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.UtcNow,
+                new Plugin {  PluginName = "Plugin4", ManualMinutes = 20, AutomatedMinutes = 5, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.Now,
                 LastModifiedBy = null, LastModifiedDate = null},
-                new Plugin {  PluginName = "Plugin5", ManualMinutes = 10, AutomatedMinutes = 8, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.UtcNow,
+                new Plugin {  PluginName = "Plugin5", ManualMinutes = 10, AutomatedMinutes = 8, DepartmentId = 1, Description = "-", CreatedBy = 2701, CreatedDate = DateTime.Now,
                 LastModifiedBy = null, LastModifiedDate = null},
 
             };
@@ -75,22 +71,22 @@ namespace Am.Persistence.Seeding
         {
             var locCol = new[]
             {
-                new PluginLog {  JobName = "Job1", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "Job2", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "Job3", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
-                new PluginLog {  JobName = "Job4", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "Job5", CreatedBy = 2704,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 3  },
-                new PluginLog {  JobName = "Job6", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "Job7", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 4  },
-                new PluginLog {  JobName = "Job8", CreatedBy = 2706,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "Job9", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "Job10", CreatedBy = 2708,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId =5  },
-                new PluginLog {  JobName = "Job11", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 3  },
-                new PluginLog {  JobName = "Job12", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
-                new PluginLog {  JobName = "Job10", CreatedBy = 2709,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
-                new PluginLog {  JobName = "Job10", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 5  },
-                new PluginLog {  JobName = "Job10", CreatedBy = 2703,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
-                new PluginLog {  JobName = "Job10", CreatedBy = 2701,CreatedDate = DateTime.UtcNow,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job1", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job2", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job3", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
+                new PluginLog {  JobName = "Job4", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job5", CreatedBy = 2704,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 3  },
+                new PluginLog {  JobName = "Job6", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job7", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 4  },
+                new PluginLog {  JobName = "Job8", CreatedBy = 2706,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job9", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job10", CreatedBy = 2708,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId =5  },
+                new PluginLog {  JobName = "Job11", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 3  },
+                new PluginLog {  JobName = "Job12", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
+                new PluginLog {  JobName = "Job10", CreatedBy = 2709,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
+                new PluginLog {  JobName = "Job10", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 5  },
+                new PluginLog {  JobName = "Job10", CreatedBy = 2703,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 2  },
+                new PluginLog {  JobName = "Job10", CreatedBy = 2701,CreatedDate = DateTime.Now,Activity = "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",LastModifiedBy = null, LastModifiedDate = null, PluginId = 1  },
             };
 
             await _service.PluginLog.AddRange(locCol);
