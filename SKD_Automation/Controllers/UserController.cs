@@ -9,9 +9,7 @@ using AM.Persistence;
 using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
-using Am.Application.Helper;
 using AM.Domain.Dto;
-using AM.Application.Helper;
 using System.Linq;
 
 using Am.Persistence.Seeding;
@@ -20,6 +18,7 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using AM.Application.Exceptions;
 using System.Net;
+using SKD_Automation.Helper;
 
 namespace SKD_Automation.Controllers
 {

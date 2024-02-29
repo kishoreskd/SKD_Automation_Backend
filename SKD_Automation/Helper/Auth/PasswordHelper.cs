@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Am.Application.Helper
+namespace SKD_Automation.Helper
 {
     public class PasswordHelper
     {

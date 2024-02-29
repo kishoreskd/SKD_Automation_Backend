@@ -120,6 +120,7 @@ namespace SKD_Automation.Controllers
             return StatusCode(200);
         }
 
+
         [HttpDelete("remove/{id}")]
         public async Task<IActionResult> DeletePluginLog(int id)
         {
@@ -141,8 +142,6 @@ namespace SKD_Automation.Controllers
             await _service.Commit();
             return StatusCode(200);
         }
-
-
 
 
         [HttpGet("get_by_plugin/{pluginId}")]

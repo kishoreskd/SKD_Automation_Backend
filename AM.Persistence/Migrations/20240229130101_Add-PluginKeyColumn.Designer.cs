@@ -4,14 +4,16 @@ using AM.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AM.Persistence.Migrations
 {
     [DbContext(typeof(AutomationDbService))]
-    partial class AutomationDbServiceModelSnapshot : ModelSnapshot
+    [Migration("20240229130101_Add-PluginKeyColumn")]
+    partial class AddPluginKeyColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

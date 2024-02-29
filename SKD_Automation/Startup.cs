@@ -40,7 +40,7 @@ namespace SKD_Automation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddJWTTokenAuthentication();
+            services.AddJWTTokenAuthentication(Configuration);
 
             services.AddControllers().AddFluentValidation();
             services.AddFluentValidationValidators();
@@ -48,8 +48,15 @@ namespace SKD_Automation
             services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
             //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
 
+
+            services.AddLogging(builder =>
+            {
+                builder.AddConsole(); 
+            });
+
             services.AddScoped<IUnitWorkService, UnitWorkService>();
             services.AddAutoMapper(typeof(Program).Assembly);
+            services.AddSingleton(Configuration);
 
             services.AddSwaggerGen(c =>
             {
@@ -76,7 +83,9 @@ namespace SKD_Automation
             //It will allow diffent domain can access 
             app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            app.UseAuthentication();
+            app.UseMiddleware<AuthenticationMiddleware>();
+
+            //app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -103,7 +112,7 @@ namespace SKD_Automation
 
     public static class JWTTokenAuthenticationExtension
     {
-        public static void AddJWTTokenAuthentication(this IServiceCollection service)
+        public static void AddJWTTokenAuthentication(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddAuthentication(x =>
             {

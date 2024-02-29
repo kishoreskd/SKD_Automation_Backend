@@ -21,7 +21,7 @@ namespace AM.Domain.Entities
         public double ManualMinutes { get; set; }
         public double AutomatedMinutes { get; set; }
         public string Description { get; set; }
-
+        public string PluginKey { get; set; }
 
         public int DepartmentId { get; set; }
         public Department Department { get; set; }

@@ -6,15 +6,17 @@ using System.Threading.Tasks;
 
 using Microsoft.EntityFrameworkCore;
 using AM.Domain.Entities;
-
+using Microsoft.Extensions.Logging;
 
 namespace AM.Persistence
 {
     public class AutomationDbService : DbContext
     {
+        private readonly ILoggerFactory _loggerFactory;
 
-        public AutomationDbService(DbContextOptions<AutomationDbService> option) : base(option)
+        public AutomationDbService(DbContextOptions<AutomationDbService> option, ILoggerFactory loggerFactory) : base(option)
         {
+            _loggerFactory = loggerFactory;
         }
 
         public DbSet<Department> Department { get; set; }
@@ -23,6 +25,12 @@ namespace AM.Persistence
         public DbSet<Role> Role { get; set; }
         public DbSet<User> User { get; set; }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            // Configure DbContextOptionsBuilder with the provided logger factory
+            optionsBuilder.UseLoggerFactory(_loggerFactory);
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

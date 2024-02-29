@@ -24,7 +24,6 @@ namespace SKD_Automation
         public int ErrorCode { get; set; }
         public string ErrorMessage { get; set; }
         public string ErrorDetails { get; set; }
-
         public string InnerException { get; set; }
 
         public override string ToString()
