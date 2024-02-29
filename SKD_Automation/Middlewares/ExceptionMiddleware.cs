@@ -34,7 +34,7 @@ namespace SKD_Automation.Middlewares
                 await _next(context);
             }
             catch (Exception ex)
-            {
+                {
                 ApiError response;
                 HttpStatusCode sc = HttpStatusCode.InternalServerError;
 

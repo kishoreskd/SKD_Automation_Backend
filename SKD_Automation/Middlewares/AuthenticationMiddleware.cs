@@ -38,7 +38,7 @@ namespace SKD_Automation.Middlewares
                 return;
             }
 
-            if (context.Request.Path.StartsWithSegments("/Authenticate/plugin"))
+            if (context.Request.Path.StartsWithSegments("/api/AuthenticateApi/authenticate"))
             {
                 await _next(context);
                 return;

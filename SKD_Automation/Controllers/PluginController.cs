@@ -281,8 +281,8 @@ namespace SKD_Automation.Controllers
         public async Task<IActionResult> GetPluginLogByDay(int pluginId, int day, int month, int year)
         {
 
-            //string s = EncryptionLibraryHelper.EncryptText((3).ToString());
-            //string d = EncryptionLibraryHelper.DecryptText(s);
+            string s = EncryptionLibraryHelper.EncryptText((3).ToString());
+            string d = EncryptionLibraryHelper.DecryptText("sasadsadsad");
 
 
 

@@ -45,7 +45,7 @@ namespace SKD_Automation.Helper
             return jwtTokenHandler.WriteToken(token);
         }
 
-        public static string CreateJwtForLicense()
+        public static string CreateJwtForLicense(string name)
         {
             var jwtTokenHandler = new JwtSecurityTokenHandler();
 
@@ -53,7 +53,7 @@ namespace SKD_Automation.Helper
 
             var identity = new ClaimsIdentity(new Claim[]
             {
-                 new Claim(ClaimTypes.Authentication, "TEST"),
+                 new Claim(type:"PluginName", name),
             });
 
             var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -61,7 +61,7 @@ namespace SKD_Automation.Helper
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = identity,
-                Expires = DateTime.Now.AddHours(1),
+                //Expires = DateTime.Now.AddHours(1),
                 //Expires = DateTime.Now.AddHours(1),
 
                 SigningCredentials = credentials
@@ -167,7 +167,7 @@ namespace SKD_Automation.Helper
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateLifetime = false,
-                ClockSkew = TimeSpan.Zero,
+                ClockSkew = TimeSpan.Zero, 
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
