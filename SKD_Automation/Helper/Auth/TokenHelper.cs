@@ -40,7 +40,7 @@ namespace SKD_Automation.Helper
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = identity,
-                    Expires = DateTime.Now.AddHours(1),
+                    Expires = DateTime.Now.AddHours(10),
                     //Expires = DateTime.Now.AddSeconds(1),
 
                     SigningCredentials = credentials
@@ -75,6 +75,7 @@ namespace SKD_Automation.Helper
                 throw new JWTExcpetion("Unauthorized - Token is invalid.");
             }
         }
+
         public static ClaimsPrincipal GetPricipalForRefreshToken(string token)
         {
             try
@@ -103,7 +104,8 @@ namespace SKD_Automation.Helper
             }
             catch (Exception ex)
             {
-                throw new JWTExcpetion("Unauthorized - Token is invalid.");
+                throw new Exception("Un authorized!");
+                //throw new JWTExcpetion("Unauthorized - Token is invalid.");
             }
         }
         public static ClaimsPrincipal GetPrincipalForLgn(string token)
@@ -130,7 +132,9 @@ namespace SKD_Automation.Helper
 
 
                 if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                {
                     throw new SecurityTokenException("This is Invalid Token");
+                }
 
                 if (!jwtSecurityToken.Payload.ContainsKey("exp"))
                 {
@@ -142,7 +146,7 @@ namespace SKD_Automation.Helper
 
                 if (DateTime.UtcNow > expDateTimeUtc)
                 {
-                    throw new SecurityTokenExpiredException();
+                    throw new JWTExcpetion("Unauthorized - Token is Expired.");
                 }
 
                 return principal;

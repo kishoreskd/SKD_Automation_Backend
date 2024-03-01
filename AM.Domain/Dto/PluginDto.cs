@@ -19,6 +19,8 @@ namespace AM.Domain.Dto
         public int DepartmentId { get; set; }
         public string DepartmentName { get; set; }
 
+        public string? PluginToken { get; set; }
+
         public List<PluginLogDto> PluginLogs { get; set; }
     }
 }

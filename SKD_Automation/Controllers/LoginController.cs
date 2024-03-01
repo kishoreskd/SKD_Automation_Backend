@@ -109,7 +109,6 @@ namespace SKD_Automation.Controllers
             }
             catch (Exception ex)
             {
-                string exe = ex.Message;
                 throw;
             }
         }

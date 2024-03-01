@@ -33,8 +33,7 @@ namespace SKD_Automation.Middlewares
                 await _next(context);
                 return;
             }
-
-
+            
             var header = context.Request.Headers[SD.HeadersKey.Login];
             var clientHeader = context.Request.Headers[SD.HeadersKey.License];
 
