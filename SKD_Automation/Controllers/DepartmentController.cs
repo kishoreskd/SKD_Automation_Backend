@@ -12,9 +12,11 @@ using FluentValidation;
 using FluentValidation.Results;
 using Am.Persistence.Seeding;
 using Microsoft.AspNetCore.Authorization;
+using SKD_Automation.Filters;
 
 namespace SKD_Automation.Controllers
 {
+    [ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -23,6 +25,7 @@ namespace SKD_Automation.Controllers
         private readonly IUnitWorkService _service;
         private readonly IMapper _mapper;
         private readonly IValidator<Department> _validator;
+
 
         public DepartmentController(IUnitWorkService service, IMapper mapper, IValidator<Department> validator)
         {

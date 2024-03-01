@@ -15,9 +15,11 @@ using Am.Persistence.Seeding;
 using System.Net;
 using SKD_Automation.Helper;
 using AM.Domain.Dto;
+using SKD_Automation.Filters;
 
 namespace SKD_Automation.Controllers
 {
+    [ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticateApiController : ControllerBase

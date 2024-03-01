@@ -12,9 +12,11 @@ using AutoMapper;
 using FluentValidation;
 using FluentValidation.Results;
 using Am.Persistence.Seeding;
+using SKD_Automation.Filters;
 
 namespace SKD_Automation.Controllers
 {
+    [ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
     [Route("[controller]")]
     [ApiController]
     public class DashbordController : ControllerBase

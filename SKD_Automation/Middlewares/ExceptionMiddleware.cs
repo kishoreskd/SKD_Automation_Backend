@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AM.Application.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -29,15 +30,24 @@ namespace SKD_Automation.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
+            ApiError response;
+            HttpStatusCode sc = HttpStatusCode.InternalServerError;
+
             try
             {
                 await _next(context);
             }
+            catch (JWTExcpetion ex)
+            {
+                string msg = ex.Message;
+                sc = HttpStatusCode.Unauthorized;
+                response = new ApiError((int)sc, ex.Message);
+                context.Response.StatusCode = (int)sc;
+                await context.Response.WriteAsync(response.ToString());
+                return;
+            }
             catch (Exception ex)
-                {
-                ApiError response;
-                HttpStatusCode sc = HttpStatusCode.InternalServerError;
-
+            {
                 if (_env.IsDevelopment())
                 {
                     response = new ApiError((int)sc, ex.Message, ex.StackTrace.ToString(), ex.InnerException?.ToString());

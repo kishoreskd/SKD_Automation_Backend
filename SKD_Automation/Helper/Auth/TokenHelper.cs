@@ -13,173 +13,219 @@ using System.Diagnostics;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using AM.Persistence;
+using AM.Application.Exceptions;
 
 namespace SKD_Automation.Helper
 {
     public static class TokenHelper
     {
+        #region Login TOKEN
+
         public static string CreateJWTToken(User user)
         {
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
-
-            var identity = new ClaimsIdentity(new Claim[]
+            try
             {
+                var jwtTokenHandler = new JwtSecurityTokenHandler();
+                var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
+
+                var identity = new ClaimsIdentity(new Claim[]
+                {
                 new Claim(ClaimTypes.Role, user.Role.RoleName),
                 new Claim(ClaimTypes.Name,user.UserName),
                 new Claim(type: "employeeId", value: $"{user.EmployeeId}")
-            });
+                });
 
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+                var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = identity,
+                    Expires = DateTime.Now.AddHours(1),
+                    //Expires = DateTime.Now.AddSeconds(1),
+
+                    SigningCredentials = credentials
+                };
+
+                var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+                return jwtTokenHandler.WriteToken(token);
+            }
+            catch
             {
-                Subject = identity,
-                Expires = DateTime.Now.AddHours(1),
-                //Expires = DateTime.Now.AddSeconds(1),
-
-                SigningCredentials = credentials
-            };
-
-            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-            return jwtTokenHandler.WriteToken(token);
+                throw new JWTExcpetion("Token creation failed!");
+            }
         }
+        public static string CreateRefreshToken(IEnumerable<User> users)
+        {
+            try
+            {
+                byte[] tokenBytes = new byte[64];
+                RandomNumberGenerator.Create().GetBytes(tokenBytes);
+
+                var refreshToken = Convert.ToBase64String(tokenBytes);
+
+                if (users.Any(e => e.RefreshToken != null && e.RefreshToken.Equals(refreshToken)))
+                {
+                    return CreateRefreshToken(users);
+                }
+
+                return refreshToken;
+            }
+            catch (Exception ex)
+            {
+                throw new JWTExcpetion("Unauthorized - Token is invalid.");
+            }
+        }
+        public static ClaimsPrincipal GetPricipalForRefreshToken(string token)
+        {
+            try
+            {
+                var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
+
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateLifetime = false,
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+
+                SecurityToken securityToken;
+                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+                var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+                if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                    throw new SecurityTokenException("This is Invalid Token");
+
+                return principal;
+            }
+            catch (Exception ex)
+            {
+                throw new JWTExcpetion("Unauthorized - Token is invalid.");
+            }
+        }
+        public static ClaimsPrincipal GetPrincipalForLgn(string token)
+        {
+            try
+            {
+                var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
+
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateLifetime = false,
+                    ClockSkew = TimeSpan.Zero,
+                };
+
+                var tokenHandler = new JwtSecurityTokenHandler();
+
+                SecurityToken securityToken;
+                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+                var jwtSecurityToken = securityToken as JwtSecurityToken;
+
+
+                if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                    throw new SecurityTokenException("This is Invalid Token");
+
+                if (!jwtSecurityToken.Payload.ContainsKey("exp"))
+                {
+                    throw new SecurityTokenExpiredException();
+                }
+
+                double expirationTimeStamp = Convert.ToDouble(jwtSecurityToken.Payload["exp"]);
+                var expDateTimeUtc = DateTimeOffset.FromUnixTimeSeconds((long)expirationTimeStamp).UtcDateTime;
+
+                if (DateTime.UtcNow > expDateTimeUtc)
+                {
+                    throw new SecurityTokenExpiredException();
+                }
+
+                return principal;
+            }
+            catch (Exception ex)
+            {
+                throw new JWTExcpetion("Unauthorized - Token is invalid.");
+            }
+        }
+
+        #endregion
+
+
+
+
+        #region License TOKEN
 
         public static string CreateJwtForLicense(string name)
         {
-            var jwtTokenHandler = new JwtSecurityTokenHandler();
-
-            var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
-
-            var identity = new ClaimsIdentity(new Claim[]
+            try
             {
+                var jwtTokenHandler = new JwtSecurityTokenHandler();
+
+                var key = Encoding.ASCII.GetBytes("iiLEzWQM6cORtBVSaemryrNMx0HqB7Gz");
+
+                var identity = new ClaimsIdentity(new Claim[]
+                {
                  new Claim(type:"PluginName", name),
-            });
+                });
 
-            var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
+                var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
 
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = identity,
-                //Expires = DateTime.Now.AddHours(1),
-                //Expires = DateTime.Now.AddHours(1),
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = identity,
+                    //Expires = DateTime.Now.AddHours(1),
+                    //Expires = DateTime.Now.AddHours(1),
 
-                SigningCredentials = credentials
-            };
+                    SigningCredentials = credentials
+                };
 
-            var token = jwtTokenHandler.CreateToken(tokenDescriptor);
-            return jwtTokenHandler.WriteToken(token);
-        }
-
-
-        public static string CreateRefreshToken(IEnumerable<User> users)
-        {
-            byte[] tokenBytes = new byte[64];
-            RandomNumberGenerator.Create().GetBytes(tokenBytes);
-
-            var refreshToken = Convert.ToBase64String(tokenBytes);
-
-            if (users.Any(e => e.RefreshToken != null && e.RefreshToken.Equals(refreshToken)))
-            {
-                return CreateRefreshToken(users);
+                var token = jwtTokenHandler.CreateToken(tokenDescriptor);
+                return jwtTokenHandler.WriteToken(token);
             }
-
-            return refreshToken;
-        }
-
-
-        public static ClaimsPrincipal GetPricipalForRefreshToken(string token)
-        {
-            var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
-
-            var tokenValidationParameters = new TokenValidationParameters
+            catch
             {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateLifetime = false,
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("This is Invalid Token");
-
-            return principal;
-        }
-
-
-        public static ClaimsPrincipal GetPrincipalForUserToken(string token)
-        {
-            var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
-
-            var tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateLifetime = false,
-                ClockSkew = TimeSpan.Zero,
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-
-
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("This is Invalid Token");
-
-            if (!jwtSecurityToken.Payload.ContainsKey("exp"))
-            {
-                throw new SecurityTokenExpiredException();
+                throw new JWTExcpetion("Token creation failed!");
             }
-
-            double expirationTimeStamp = Convert.ToDouble(jwtSecurityToken.Payload["exp"]);
-            var expDateTimeUtc = DateTimeOffset.FromUnixTimeSeconds((long)expirationTimeStamp).UtcDateTime;
-
-            if (DateTime.UtcNow > expDateTimeUtc)
-            {
-                throw new SecurityTokenExpiredException();
-            }
-
-            return principal;
         }
-
-
-        public static ClaimsPrincipal GetPrincipleForProductToken(string token)
+        public static ClaimsPrincipal GetPrincipleForLicense(string token)
         {
 
-            var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
-
-            var tokenValidationParameters = new TokenValidationParameters
+            try
             {
-                ValidateAudience = false,
-                ValidateIssuer = false,
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidateLifetime = false,
-                ClockSkew = TimeSpan.Zero, 
-            };
+                var key = Encoding.ASCII.GetBytes("iiLEzWQM6cORtBVSaemryrNMx0HqB7Gz");
 
-            var tokenHandler = new JwtSecurityTokenHandler();
+                var tokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateAudience = false,
+                    ValidateIssuer = false,
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(key),
+                    ValidateLifetime = false,
+                    ClockSkew = TimeSpan.Zero,
+                };
 
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
+                var tokenHandler = new JwtSecurityTokenHandler();
 
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
-                throw new SecurityTokenException("This is Invalid Token");
+                SecurityToken securityToken;
+                var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
+                var jwtSecurityToken = securityToken as JwtSecurityToken;
 
-            return principal;
+                if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                    throw new JWTExcpetion("Unauthorized - Token is invalid.");
+
+                return principal;
+            }
+            catch (Exception ex)
+            {
+                throw new JWTExcpetion("Unauthorized - Token is invalid.");
+            }
         }
+
+        #endregion
     }
 }

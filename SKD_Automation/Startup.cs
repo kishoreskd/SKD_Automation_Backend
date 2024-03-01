@@ -25,6 +25,7 @@ using SKD_Automation.Middlewares;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using SKD_Automation.Filters;
 
 namespace SKD_Automation
 {
@@ -42,16 +43,19 @@ namespace SKD_Automation
         {
             services.AddJWTTokenAuthentication(Configuration);
 
+            services.AddFilterService();
+
             services.AddControllers().AddFluentValidation();
+
             services.AddFluentValidationValidators();
 
             services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
-            //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
 
+            //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
 
             services.AddLogging(builder =>
             {
-                builder.AddConsole(); 
+                builder.AddConsole();
             });
 
             services.AddScoped<IUnitWorkService, UnitWorkService>();
@@ -109,7 +113,6 @@ namespace SKD_Automation
         }
     }
 
-
     public static class JWTTokenAuthenticationExtension
     {
         public static void AddJWTTokenAuthentication(this IServiceCollection service, IConfiguration configuration)
@@ -140,4 +143,12 @@ namespace SKD_Automation
         }
     }
 
+    public static class FilterExtension
+    {
+        public static void AddFilterService(this IServiceCollection service)
+        {
+            service.AddScoped<HeaderAuthorizationFilterForLogin>();
+            service.AddScoped<HeaderAuthorizationFilterForLicense>();
+        }
+    }
 }

@@ -12,9 +12,11 @@ using FluentValidation.Results;
 using AM.Domain.Dto;
 using AM.Application.Exceptions;
 using Microsoft.AspNetCore.Authorization;
+using SKD_Automation.Filters;
 
 namespace SKD_Automation.Controllers
 {
+    [ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -175,6 +177,7 @@ namespace SKD_Automation.Controllers
 
             return Ok(dto);
         }
+
 
         [HttpGet("get_by_year/pluginId={pluginId}&year={year}")]
         public async Task<IActionResult> GetForyear(int pluginId, int year)

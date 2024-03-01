@@ -4,7 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Threading.Tasks;
-
+using AM.Application.Exceptions;
 using Microsoft.AspNetCore.Http;
 using SKD_Automation.Helper;
 
@@ -22,10 +22,6 @@ namespace SKD_Automation.Middlewares
 
         public async Task Invoke(HttpContext context)
         {
-            ApiError err;
-            HttpStatusCode sc = HttpStatusCode.Unauthorized;
-
-
             if (context.Request.Path.StartsWithSegments("/Login/authenticate"))
             {
                 await _next(context);
@@ -38,66 +34,39 @@ namespace SKD_Automation.Middlewares
                 return;
             }
 
-            if (context.Request.Path.StartsWithSegments("/api/AuthenticateApi/authenticate"))
+
+            var header = context.Request.Headers[SD.HeadersKey.Login];
+            var clientHeader = context.Request.Headers[SD.HeadersKey.License];
+
+            if ((COM.IsNullOrEmpty(header) && COM.IsNullOrEmpty(clientHeader)))
             {
-                await _next(context);
-                return;
+                throw new JWTExcpetion("Unauthorized - Token is missing.");
             }
 
-            try
+            ClaimsPrincipal pricipal = null;
+
+            if (!COM.IsNullOrEmpty(header))
             {
-
-                var header = context.Request.Headers["Authorization"];
-                var clientHeader = context.Request.Headers["Auth-Key"];
-
-                if (COM.IsNullOrEmpty(header) && COM.IsNullOrEmpty(clientHeader))
-                {
-                    err = new ApiError((int)sc, "Unauthorized - Token is missing");
-                    context.Response.StatusCode = (int)sc;
-                    await context.Response.WriteAsync(err.ToString());
-                    return;
-                }
-
-                string userToken = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
-                string productToken = context.Request.Headers["Auth-Key"].ToString().Replace("Bearer ", "");
-                ClaimsPrincipal pricipal = null;
-
-                if (!COM.IsNullOrEmpty(header))
-                {
-                    pricipal = TokenHelper.GetPrincipalForUserToken(userToken);
-                }
-                else if (!COM.IsNullOrEmpty(clientHeader))
-                {
-                    pricipal = TokenHelper.GetPrincipleForProductToken(productToken);
-                }
-                else
-                {
-                    err = new ApiError((int)sc, "Unauthorized - Token is missing");
-                    context.Response.StatusCode = (int)sc;
-                    await context.Response.WriteAsync(err.ToString());
-                    return;
-                }
-
-                if (COM.IsNull(pricipal))
-                {
-                    err = new ApiError((int)sc, "Unauthorized - Invalid license token");
-                    context.Response.StatusCode = (int)sc;
-                    await context.Response.WriteAsync(err.ToString());
-                    return;
-                };
-
-
-                context.User = pricipal;
-                await _next(context);
+                string loginToken = context.Request.Headers[SD.HeadersKey.Login].ToString().Replace("Bearer ", "");
+                pricipal = TokenHelper.GetPrincipalForLgn(loginToken);
             }
-            catch (Exception ex)
+            else if (!COM.IsNullOrEmpty(clientHeader))
             {
-                string msg = ex.Message;
-                err = new ApiError((int)sc, "Unauthorized - Invalid token");
-                context.Response.StatusCode = (int)sc;
-                await context.Response.WriteAsync(err.ToString());
-                return;
+                string licenseToken = context.Request.Headers[SD.HeadersKey.License].ToString().Replace("Bearer ", "");
+                pricipal = TokenHelper.GetPrincipleForLicense(licenseToken);
             }
+            else
+            {
+                throw new JWTExcpetion("Unauthorized - Token is missing.");
+            }
+
+            if (COM.IsNull(pricipal))
+            {
+                throw new JWTExcpetion("Unauthorized - Invalid license token.");
+            };
+
+            context.User = pricipal;
+            await _next(context);
         }
     }
 }

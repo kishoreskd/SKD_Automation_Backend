@@ -13,9 +13,11 @@ using AM.Domain.Dto;
 using AM.Application.Exceptions;
 using Microsoft.AspNetCore.Authorization;
 using SKD_Automation.Helper;
+using SKD_Automation.Filters;
 
 namespace SKD_Automation.Controllers
 {
+    [ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
     [Authorize]
     [ApiController]
     [Route("[controller]")]
@@ -280,11 +282,6 @@ namespace SKD_Automation.Controllers
         [HttpGet("plugin/{pluginId}/log/{day}/{month}/{year}")]
         public async Task<IActionResult> GetPluginLogByDay(int pluginId, int day, int month, int year)
         {
-
-            string s = EncryptionLibraryHelper.EncryptText((3).ToString());
-            string d = EncryptionLibraryHelper.DecryptText("sasadsadsad");
-
-
 
             Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
 

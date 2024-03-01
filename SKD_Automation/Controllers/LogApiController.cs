@@ -3,6 +3,7 @@ using AM.Domain.Entities;
 using AM.Persistence;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using SKD_Automation.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace SKD_Automation.Controllers
 {
+    [ServiceFilter(typeof(HeaderAuthorizationFilterForLicense))]
     [Route("api/[controller]")]
     [ApiController]
     public class LogApiController : ControllerBase
@@ -25,8 +27,8 @@ namespace SKD_Automation.Controllers
         [HttpPost("post/log")]
         public async Task<IActionResult> AddLog(LogApiDto dto)
         {
-            var clientHeader = HttpContext.Request.Headers["Auth-Key"];
-            string token = HttpContext.Request.Headers["Auth-Key"].ToString().Replace("Bearer ", "");
+            var clientHeader = HttpContext.Request.Headers[SD.HeadersKey.License];
+            string token = HttpContext.Request.Headers[SD.HeadersKey.License].ToString().Replace("Bearer ", "");
 
             Plugin p = await _service.Plugin.GetFirstOrDefault(e => e.PluginToken.Equals(token));
 

@@ -19,9 +19,11 @@ using Microsoft.AspNetCore.Authorization;
 using AM.Application.Exceptions;
 using System.Net;
 using SKD_Automation.Helper;
+using SKD_Automation.Filters;
 
 namespace SKD_Automation.Controllers
 {
+    [ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
     [Authorize]
     [Route("[controller]")]
     [ApiController]
@@ -170,7 +172,6 @@ namespace SKD_Automation.Controllers
             await _service.Commit();
             return StatusCode(200);
         }
-
 
         private async Task<bool> CheckUserNameExistAsync(string userName) => await _service.User.IsAnyAsync(e => e.UserName.Equals(userName));
     }
