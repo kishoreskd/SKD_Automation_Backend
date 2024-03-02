@@ -13,6 +13,8 @@ using FluentValidation.Results;
 using Am.Persistence.Seeding;
 using Microsoft.AspNetCore.Authorization;
 using SKD_Automation.Filters;
+using Microsoft.Extensions.Options;
+using SKD_Automation.Helper;
 
 namespace SKD_Automation.Controllers
 {
@@ -26,8 +28,7 @@ namespace SKD_Automation.Controllers
         private readonly IMapper _mapper;
         private readonly IValidator<Department> _validator;
 
-
-        public DepartmentController(IUnitWorkService service, IMapper mapper, IValidator<Department> validator)
+        public DepartmentController(IUnitWorkService service, IMapper mapper, IValidator<Department> validator, IOptions<JwtAppSettingJson> jwtSetting)
         {
             _service = service;
             _mapper = mapper;

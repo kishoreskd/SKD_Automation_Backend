@@ -14,19 +14,39 @@ using System.Configuration;
 using Microsoft.Extensions.Configuration;
 using AM.Persistence;
 using AM.Application.Exceptions;
+using Microsoft.Extensions.Options;
 
 namespace SKD_Automation.Helper
 {
-    public static class TokenHelper
+
+    public interface ITokenHelper
     {
+        string CreateJWTToken(User user);
+        string CreateRefreshToken(IQueryable<User> users);
+        ClaimsPrincipal GetPricipalForRefreshToken(string token);
+        ClaimsPrincipal GetPrincipalForLgn(string token);
+        string CreateJwtForLicense(string name, string idKey);
+        ClaimsPrincipal GetPrincipleForLicense(string token);
+    }
+
+    public class TokenHelper : ITokenHelper
+    {
+        private readonly IOptions<JwtAppSettingJson> _jwtSettingJSON;
+
+        public TokenHelper(IOptions<JwtAppSettingJson> jwtSettingJSON)
+        {
+            _jwtSettingJSON = jwtSettingJSON;
+        }
+
         #region Login TOKEN
 
-        public static string CreateJWTToken(User user)
+
+        public string CreateJWTToken(User user)
         {
             try
             {
                 var jwtTokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
+                var key = Encoding.ASCII.GetBytes(this._jwtSettingJSON.Value.KeyLgn);
 
                 var identity = new ClaimsIdentity(new Claim[]
                 {
@@ -54,7 +74,7 @@ namespace SKD_Automation.Helper
                 throw new JWTExcpetion("Token creation failed!");
             }
         }
-        public static string CreateRefreshToken(IEnumerable<User> users)
+        public string CreateRefreshToken(IQueryable<User> users)
         {
             try
             {
@@ -76,11 +96,11 @@ namespace SKD_Automation.Helper
             }
         }
 
-        public static ClaimsPrincipal GetPricipalForRefreshToken(string token)
+        public ClaimsPrincipal GetPricipalForRefreshToken(string token)
         {
             try
             {
-                var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
+                var key = Encoding.ASCII.GetBytes(this._jwtSettingJSON.Value.KeyLgn);
 
                 var tokenValidationParameters = new TokenValidationParameters
                 {
@@ -108,11 +128,11 @@ namespace SKD_Automation.Helper
                 //throw new JWTExcpetion("Unauthorized - Token is invalid.");
             }
         }
-        public static ClaimsPrincipal GetPrincipalForLgn(string token)
+        public ClaimsPrincipal GetPrincipalForLgn(string token)
         {
             try
             {
-                var key = Encoding.ASCII.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM");
+                var key = Encoding.ASCII.GetBytes(this._jwtSettingJSON.Value.KeyLgn);
 
                 var tokenValidationParameters = new TokenValidationParameters
                 {
@@ -160,21 +180,20 @@ namespace SKD_Automation.Helper
         #endregion
 
 
-
-
         #region License TOKEN
 
-        public static string CreateJwtForLicense(string name)
+        public string CreateJwtForLicense(string name, string idKey)
         {
             try
             {
                 var jwtTokenHandler = new JwtSecurityTokenHandler();
 
-                var key = Encoding.ASCII.GetBytes("iiLEzWQM6cORtBVSaemryrNMx0HqB7Gz");
+                var key = Encoding.ASCII.GetBytes(this._jwtSettingJSON.Value.KeyLic);
 
                 var identity = new ClaimsIdentity(new Claim[]
                 {
                  new Claim(type:"PluginName", name),
+                 new Claim(type:"key", idKey)
                 });
 
                 var credentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256);
@@ -196,12 +215,12 @@ namespace SKD_Automation.Helper
                 throw new JWTExcpetion("Token creation failed!");
             }
         }
-        public static ClaimsPrincipal GetPrincipleForLicense(string token)
+        public ClaimsPrincipal GetPrincipleForLicense(string token)
         {
 
             try
             {
-                var key = Encoding.ASCII.GetBytes("iiLEzWQM6cORtBVSaemryrNMx0HqB7Gz");
+                var key = Encoding.ASCII.GetBytes(this._jwtSettingJSON.Value.KeyLic);
 
                 var tokenValidationParameters = new TokenValidationParameters
                 {

@@ -22,9 +22,6 @@ namespace AM.Domain.Entities
         public double AutomatedMinutes { get; set; }
         public string Description { get; set; }
 
-        public string? PluginToken { get; set; }
-
-
         public int DepartmentId { get; set; }
         public Department Department { get; set; }
         public ICollection<PluginLog> PluginLogCol { get; set; }

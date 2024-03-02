@@ -26,6 +26,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using SKD_Automation.Filters;
+using SKD_Automation.Helper;
+using System.Diagnostics;
 
 namespace SKD_Automation
 {
@@ -41,6 +43,7 @@ namespace SKD_Automation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddJWTTokenAuthentication(Configuration);
 
             services.AddFilterService();
@@ -49,18 +52,25 @@ namespace SKD_Automation
 
             services.AddFluentValidationValidators();
 
-            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
+            //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
 
-            //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
+            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
 
             services.AddLogging(builder =>
             {
                 builder.AddConsole();
             });
 
+
+            services.Configure<JwtAppSettingJson>(Configuration.GetSection("JWT"));
+
             services.AddScoped<IUnitWorkService, UnitWorkService>();
+
+            services.AddTransient<ITokenHelper, TokenHelper>();
+
             services.AddAutoMapper(typeof(Program).Assembly);
-            services.AddSingleton(Configuration);
+
+            //services.AddTransient<AuthenticationMiddleware>();
 
             services.AddSwaggerGen(c =>
             {
@@ -87,7 +97,7 @@ namespace SKD_Automation
             //It will allow diffent domain can access 
             app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
-            app.UseMiddleware<AuthenticationMiddleware>();
+            app.UserAuthenticationMiddleware();
 
             //app.UseAuthentication();
 
@@ -100,6 +110,13 @@ namespace SKD_Automation
         }
     }
 
+    public static class AuthenticationMiddlewareExtension
+    {
+        public static IApplicationBuilder UserAuthenticationMiddleware(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<AuthenticationMiddleware>();
+        }
+    }
 
     public static class AddFluentValidationExtension
     {
@@ -137,11 +154,12 @@ namespace SKD_Automation
                     //ValidIssuer = "your_issuer",
                     //ValidAudience = "your_audience",
                     ClockSkew = TimeSpan.Zero,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("ByYM000OLlMQG6VVVp1OH7Xzyr7gHuw1qvUC5dcGt3SNM")),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Key_lgn"])),
                 };
             });
         }
     }
+
 
     public static class FilterExtension
     {
@@ -151,4 +169,6 @@ namespace SKD_Automation
             service.AddScoped<HeaderAuthorizationFilterForLicense>();
         }
     }
+
+
 }

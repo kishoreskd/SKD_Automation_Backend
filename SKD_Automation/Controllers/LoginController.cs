@@ -28,12 +28,14 @@ namespace SKD_Automation.Controllers
         private readonly IUnitWorkService _service;
         private readonly IMapper _mapper;
         private readonly IValidator<User> _validator;
+        private readonly ITokenHelper _tokenHelper;
 
-        public LoginController(IUnitWorkService service, IMapper mapper, IValidator<User> validator)
+        public LoginController(IUnitWorkService service, IMapper mapper, IValidator<User> validator, ITokenHelper tokenHelper)
         {
             _service = service;
             _mapper = mapper;
             _validator = validator;
+            _tokenHelper = tokenHelper;
         }
 
         [HttpPost("authenticate")]
@@ -45,13 +47,14 @@ namespace SKD_Automation.Controllers
 
             IQueryable<User> logins = _service.User.GetIQueryable();
 
+
             if (COM.IsNull(user)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "User name does not match!" });
 
             if (!PasswordHelper.VerifyPassword(obj.Password, user.Password)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Password is incorrect!" });
 
-            user.Token = TokenHelper.CreateJWTToken(user);
+            user.Token = _tokenHelper.CreateJWTToken(user);
             var newAccessToken = user.Token;
-            var newRefreshToken = TokenHelper.CreateRefreshToken(logins);
+            var newRefreshToken = _tokenHelper.CreateRefreshToken(logins);
 
             user.RefreshToken = newRefreshToken;
             user.RefreshTokenExpiryTime = DateTime.Now.AddDays(10);
@@ -62,7 +65,7 @@ namespace SKD_Automation.Controllers
                 AccessToken = newAccessToken,
                 RefreshToken = newRefreshToken
             });
-        }       
+        }
 
 
         [HttpPost("token/refresh")]
@@ -80,7 +83,7 @@ namespace SKD_Automation.Controllers
                     ErrorMessage = "Invalid client request!"
                 });
 
-                var principal = TokenHelper.GetPricipalForRefreshToken(accessToken);
+                var principal = _tokenHelper.GetPricipalForRefreshToken(accessToken);
 
                 string username = principal.Identity.Name;
 
@@ -93,10 +96,10 @@ namespace SKD_Automation.Controllers
                     ErrorMessage = "Invalid client request!"
                 });
 
-                IEnumerable<User> users = await _service.User.GetAll();
+                IQueryable<User> users = _service.User.GetIQueryable();
 
-                var newAccessToken = TokenHelper.CreateJWTToken(user);
-                var newRefreshToken = TokenHelper.CreateRefreshToken(users);
+                var newAccessToken = _tokenHelper.CreateJWTToken(user);
+                var newRefreshToken = _tokenHelper.CreateRefreshToken(users);
 
                 user.RefreshToken = newRefreshToken;
                 await _service.Commit();

@@ -26,26 +26,33 @@ namespace SKD_Automation.Controllers
     {
         private readonly IUnitWorkService _service;
         private readonly IMapper _mapper;
+        private readonly ITokenHelper _tokenHelper;
         private readonly string _plgnIncludeEntities;
 
-        public AuthenticateApiController(IUnitWorkService service, IMapper mapper)
+        public AuthenticateApiController(IUnitWorkService service, IMapper mapper, ITokenHelper tokenHelper)
         {
             _service = service;
             _mapper = mapper;
             _plgnIncludeEntities = $"{nameof(Plugin.Department)},{nameof(Plugin.PluginLogCol)}";
+            _tokenHelper = tokenHelper;
         }
 
 
-        [HttpPost("authenticate/{id}")]
+        [HttpGet("authenticate/{id:int}")]
         public async Task<IActionResult> Authenticate(int id)
         {
             Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id), noTracking: false);
 
             if (COM.IsNull(plugin)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Plugin does not exist!" });
 
-            plugin.PluginToken = TokenHelper.CreateJwtForLicense(plugin.PluginName);
+            string key = EncryptionLibraryHelper.EncryptText(plugin.PluginId.ToString());
 
-            string accessToken = plugin.PluginToken;
+            if (COM.IsNullOrEmpty(key))
+            {
+                return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Key generation failed!" });
+            }
+
+            string accessToken = _tokenHelper.CreateJwtForLicense(plugin.PluginName, key);
 
             await _service.Commit();
 

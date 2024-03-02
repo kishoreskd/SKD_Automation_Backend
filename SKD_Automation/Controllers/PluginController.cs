@@ -30,7 +30,7 @@ namespace SKD_Automation.Controllers
 
 
         public PluginController(IUnitWorkService service, IMapper mapper, IValidator<Plugin> validator)
-        {
+         {
             _service = service;
             _mapper = mapper;
             _validator = validator;
