@@ -102,6 +102,9 @@ namespace SKD_Automation.Controllers
         {
             //IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
 
+            //IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
+
+
             IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
 
             double mMinutes = 0;
