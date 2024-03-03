@@ -41,25 +41,31 @@ namespace SKD_Automation.Controllers
         [HttpGet("authenticate/{id:int}")]
         public async Task<IActionResult> Authenticate(int id)
         {
-            Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id), noTracking: false);
-
-            if (COM.IsNull(plugin)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Plugin does not exist!" });
-
-            string key = EncryptionLibraryHelper.EncryptText(plugin.PluginId.ToString());
-
-            if (COM.IsNullOrEmpty(key))
+            try
             {
-                return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Key generation failed!" });
+                Plugin plugin = await _service.Plugin.GetFirstOrDefault(e => e.PluginId.Equals(id), noTracking: false);
+
+                if (COM.IsNull(plugin)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Plugin does not exist!" });
+
+                string key = EncryptionLibraryHelper.EncryptText(plugin.PluginId.ToString());
+
+                if (COM.IsNullOrEmpty(key))
+                {
+                    return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Key generation failed!" });
+                }
+
+                string accessToken = _tokenHelper.CreateJwtForLicense(plugin.PluginName, key);
+
+                return Ok(new TokenApiDto
+                {
+                    AccessToken = accessToken
+                });
             }
-
-            string accessToken = _tokenHelper.CreateJwtForLicense(plugin.PluginName, key);
-
-            await _service.Commit();
-
-            return Ok(new TokenApiDto
+            catch (Exception ex)
             {
-                AccessToken = accessToken
-            });
+
+                throw;
+            }
         }
     }
 }

@@ -69,12 +69,40 @@ namespace SKD_Automation.Controllers
         }
 
 
-        [HttpGet("dashbord/{departmentid}/{month}/{year}")]
-        public async Task<IActionResult> Get(int departmentId, int month, int year)
+        //[HttpGet("dashbord/{departmentid}/{month}/{year}")]
+        //public async Task<IActionResult> Get(int departmentId, int month, int year)
+        //{
+        //    //IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
+
+        //    IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId), includeProp: _plgnIncludeEntities);
+
+        //    double mMinutes = 0;
+        //    double aMinutes = 0;
+
+        //    foreach (Plugin plgn in pCol)
+        //    {
+        //        List<PluginLog> log = plgn.PluginLogCol.Where(e => e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year)).ToList();
+
+        //        aMinutes += plgn.AutomatedMinutes * log.Count;
+        //        mMinutes += plgn.ManualMinutes * log.Count;
+        //    }
+
+        //    Dashbord d = new Dashbord
+        //    {
+        //        totalPlugins = pCol.Count(),
+        //        totalManualMiniutes = mMinutes,
+        //        totalAutomatedMinutes = aMinutes
+        //    };
+
+        //    return Ok(d);
+        //}
+
+        [HttpGet("dashbord/{pluginId}/{month}/{year}")]
+        public async Task<IActionResult> Get(int pluginId, int month, int year)
         {
             //IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
 
-            IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId), includeProp: _plgnIncludeEntities);
+            IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
 
             double mMinutes = 0;
             double aMinutes = 0;
@@ -96,5 +124,6 @@ namespace SKD_Automation.Controllers
 
             return Ok(d);
         }
+
     }
 }

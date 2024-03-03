@@ -210,7 +210,7 @@ namespace SKD_Automation.Helper
                 var token = jwtTokenHandler.CreateToken(tokenDescriptor);
                 return jwtTokenHandler.WriteToken(token);
             }
-            catch
+            catch (Exception ex)
             {
                 throw new JWTExcpetion("Token creation failed!");
             }

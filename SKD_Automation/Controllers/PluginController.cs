@@ -64,7 +64,7 @@ namespace SKD_Automation.Controllers
             }
 
             return Ok(dto);
-        }
+        } 
 
         [HttpPost("plugin/post")]
         public async Task<IActionResult> AddPlugin(PluginDto dto)

@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using SKD_Automation.Filters;
 using Microsoft.Extensions.Options;
 using SKD_Automation.Helper;
+using AM.Application.Exceptions;
 
 namespace SKD_Automation.Controllers
 {
@@ -66,35 +67,35 @@ namespace SKD_Automation.Controllers
             return Ok(dep);
         }
 
-        [HttpPost("add_department/{departmentName}")]
-        public async Task<IActionResult> AddDepartment(string departmentName)
-        {
-            Department dep = new Department();
-            dep.DepartmentName = departmentName;
-
-            //ValidationResult vResult = _validator.Validate(dep);
-
-            //if (!vResult.IsValid)
-            //{
-            //    return BadRequest(vResult);
-            //}
-
-
-            await _service.Department.Add(dep);
-            await _service.Commit();
-            return StatusCode(200);
-        }
-
-
-        [HttpPost("add_department")]
+        [HttpPost("post")]
         public async Task<IActionResult> AddDepartment(Department department)
         {
-            //ValidationResult vResult = _validator.Validate(department);
+            if (COM.IsNull(department))
+            {
+                return BadRequest(new ApiError
+                {
+                    ErrorCode = 400,
+                    ErrorMessage = "Department should not be null!"
+                });
+            }
 
-            //if (!vResult.IsValid)
-            //{
-            //    return BadRequest(vResult);
-            //}
+            if (COM.IsNullOrEmpty(department.DepartmentName))
+            {
+                return BadRequest(new ApiError
+                {
+                    ErrorCode = 400,
+                    ErrorMessage = "Department name can't be empty!"
+                });
+            }
+
+            if (await CheckDepNameExistAsync(department.DepartmentName))
+            {
+                return BadRequest(new ApiError
+                {
+                    ErrorCode = 400,
+                    ErrorMessage = "Department Name already exist!"
+                });
+            }
 
 
             await _service.Department.Add(department);
@@ -102,17 +103,30 @@ namespace SKD_Automation.Controllers
             return StatusCode(200);
         }
 
-        [HttpPut("update_department/{id}")]
+        [HttpPut("put/{id}")]
         public async Task<IActionResult> UpdateDepartment(int id, Department department)
         {
-            Department dep = await _service.Department.GetFirstOrDefault(e => e.DepartmentId.Equals(id), noTracking: false);
+            Department dep = await _service.Department.GetFirstOrDefault(e => e.DepartmentId.Equals(id));
+            string existingDepName = dep.DepartmentName;
 
             if (COM.IsNull(dep))
             {
                 return NotFound();
             }
 
-            dep.DepartmentName = department.DepartmentName;
+            if (!existingDepName.Equals(department.DepartmentName))
+            {
+                if (await CheckDepNameExistAsync(department.DepartmentName))
+                {
+                    return BadRequest(new ApiError
+                    {
+                        ErrorCode = 400,
+                        ErrorMessage = "Department Name already exist!"
+                    });
+                }
+            }
+
+            _service.Department.Update(department);
             await _service.Commit();
             return StatusCode(200);
         }
@@ -127,9 +141,22 @@ namespace SKD_Automation.Controllers
                 return NotFound();
             }
 
+            bool hasAssociated = await _service.Plugin.IsAnyAsync(e => e.DepartmentId.Equals(id));
+
+            if (hasAssociated)
+            {
+                return BadRequest(new ApiError
+                {
+                    ErrorCode = 400,
+                    ErrorMessage = "This department is associated with plugins, you can't able to remove!"
+                });
+            }
+
             _service.Department.Remove(dep);
             await _service.Commit();
             return StatusCode(200);
         }
+
+        private async Task<bool> CheckDepNameExistAsync(string departmentName) => await _service.Department.IsAnyAsync(e => e.DepartmentName.Equals(departmentName));
     }
 }

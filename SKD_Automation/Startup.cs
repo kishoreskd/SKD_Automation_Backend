@@ -169,6 +169,4 @@ namespace SKD_Automation
             service.AddScoped<HeaderAuthorizationFilterForLicense>();
         }
     }
-
-
 }
