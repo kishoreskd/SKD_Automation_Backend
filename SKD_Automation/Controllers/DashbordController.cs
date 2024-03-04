@@ -36,31 +36,57 @@ namespace SKD_Automation.Controllers
         }
 
 
+        //[HttpGet("dashbord/{departmentid}")]
+        //public async Task<IActionResult> GetAll(int departmentid)
+        //{
+        //    IEnumerable<Plugin> pCol = await _service.Plugin.GetAll(e => e.DepartmentId.Equals(departmentid), includeProp: _plgnIncludeEntities);
+
+        //    double mMinutes = 0;
+        //    double aMinutes = 0;
+
+        //    foreach (Plugin plgn in pCol)
+        //    {
+        //        aMinutes += plgn.AutomatedMinutes * plgn.PluginLogCol.Count;
+        //        mMinutes += plgn.ManualMinutes * plgn.PluginLogCol.Count;
+        //    }
+
+        //    Dashbord d = new Dashbord
+        //    {
+        //        totalPlugins = pCol.Count(),
+        //        totalManualMiniutes = mMinutes,
+        //        totalAutomatedMinutes = aMinutes
+        //    };
+
+        //    return Ok(d);
+        //}
+
         [HttpGet("dashbord/{departmentid}")]
+
         public async Task<IActionResult> GetAll(int departmentid)
         {
-            IEnumerable<Plugin> pCol = await _service.Plugin.GetAll(e => e.DepartmentId.Equals(departmentid), includeProp: _plgnIncludeEntities);
+            var data = _service.Plugin.GetIQueryable(e => e.DepartmentId.Equals(departmentid),
+                includeProp: _plgnIncludeEntities)
+                .Select(e => new
+                {
+                    totalManualMiniutes = e.ManualMinutes,
+                    totalAutomatedMinutes = e.AutomatedMinutes,
+                    totalLogCount = e.PluginLogCol.Count()
 
-            //List<Dashbord> dCol = pCol.Select((e, i) => new Dashbord
-            //{
-            //    totalPlugins = pCol.Count()
-            //    totalAutomatedMinutes = e.AutomatedMinutes * e.PluginLogCol.Count,
-            //    totalManualMiniutes = e.ManualMinutes * e.PluginLogCol.Count
+                }).ToList();
 
-            //}).ToList();
 
             double mMinutes = 0;
             double aMinutes = 0;
 
-            foreach (Plugin plgn in pCol)
+            foreach (var item in data)
             {
-                aMinutes += plgn.AutomatedMinutes * plgn.PluginLogCol.Count;
-                mMinutes += plgn.ManualMinutes * plgn.PluginLogCol.Count;
+                aMinutes += item.totalAutomatedMinutes * item.totalLogCount;
+                mMinutes += item.totalManualMiniutes * item.totalLogCount;
             }
 
             Dashbord d = new Dashbord
             {
-                totalPlugins = pCol.Count(),
+                totalPlugins = data.Count(),
                 totalManualMiniutes = mMinutes,
                 totalAutomatedMinutes = aMinutes
             };
@@ -100,33 +126,33 @@ namespace SKD_Automation.Controllers
         [HttpGet("dashbord/{pluginId}/{month}/{year}")]
         public async Task<IActionResult> Get(int pluginId, int month, int year)
         {
-            //IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
 
-            //IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.DepartmentId.Equals(departmentId) && e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year), includeProp: _plgnIncludeEntities);
+            var data = _service.Plugin.GetIQueryable(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities)
+                       .Select(e => new
+                       {
+                           totalManualMiniutes = e.ManualMinutes,
+                           totalAutomatedMinutes = e.AutomatedMinutes,
+                           totalLogCount = e.PluginLogCol.Where(log => log.CreatedDate.Month.Equals(month) && log.CreatedDate.Year.Equals(year)).Count()
 
-
-            IEnumerable<Plugin> pCol = await _service.Plugin.Get(e => e.PluginId.Equals(pluginId), includeProp: _plgnIncludeEntities);
+                       }).ToList();
 
             double mMinutes = 0;
             double aMinutes = 0;
 
-            foreach (Plugin plgn in pCol)
+            foreach (var item in data)
             {
-                List<PluginLog> log = plgn.PluginLogCol.Where(e => e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year)).ToList();
-
-                aMinutes += plgn.AutomatedMinutes * log.Count;
-                mMinutes += plgn.ManualMinutes * log.Count;
+                mMinutes += item.totalManualMiniutes * item.totalLogCount;
+                aMinutes += item.totalAutomatedMinutes * item.totalLogCount;
             }
 
             Dashbord d = new Dashbord
             {
-                totalPlugins = pCol.Count(),
+                totalPlugins = data.Count(),
                 totalManualMiniutes = mMinutes,
                 totalAutomatedMinutes = aMinutes
             };
 
             return Ok(d);
         }
-
     }
 }

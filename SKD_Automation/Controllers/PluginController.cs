@@ -30,7 +30,7 @@ namespace SKD_Automation.Controllers
 
 
         public PluginController(IUnitWorkService service, IMapper mapper, IValidator<Plugin> validator)
-         {
+        {
             _service = service;
             _mapper = mapper;
             _validator = validator;
@@ -64,7 +64,7 @@ namespace SKD_Automation.Controllers
             }
 
             return Ok(dto);
-        } 
+        }
 
         [HttpPost("plugin/post")]
         public async Task<IActionResult> AddPlugin(PluginDto dto)
@@ -298,6 +298,49 @@ namespace SKD_Automation.Controllers
             }
 
             return Ok(dto);
+        }
+
+
+        [HttpGet("plugins/{departmentId}/top/{count}/log/{month}/{year}")]
+        public async Task<IActionResult> GetTopPlugin(int departmentId, int count, int month, int year)
+        {
+            var plugins = _service.Plugin.GetIQueryable(e => e.DepartmentId.Equals(departmentId), includeProp: _plgnIncludeEntities)
+                                                       .Select(e => new
+                                                       {
+                                                           Plugin = e,
+                                                           Log = e.PluginLogCol.Where(e => e.CreatedDate.Month.Equals(month) && e.CreatedDate.Year.Equals(year))
+                                                       })
+                                                       .OrderByDescending(e => e.Log.Count())
+                                                       .Take(count)
+                                                       .ToList();
+
+
+            List<PluginDto> dtos = new List<PluginDto>();
+
+            foreach (var data in plugins)
+            {
+                dtos.Add(new PluginDto
+                {
+                    AutomatedMinutes = data.Plugin.AutomatedMinutes,
+                    CreatedBy = data.Plugin.CreatedBy,
+                    CreatedDate = data.Plugin.CreatedDate,
+                    DepartmentId = data.Plugin.DepartmentId,
+                    Description = data.Plugin.Description,
+                    LastModifiedBy = data.Plugin.LastModifiedBy,
+                    LastModifiedDate = data.Plugin.LastModifiedDate,
+                    ManualMinutes = data.Plugin.ManualMinutes,
+                    PluginLogs = data.Log.Select(e => _mapper.Map<PluginLogDto>(e)).ToList(),
+                    PluginId = data.Plugin.PluginId,
+                    TimeStamp = data.Plugin.TimeStamp,
+                    PluginName = data.Plugin.PluginName
+                });
+            }
+
+
+            //IEnumerable<PluginDto> dtos = plugins.Select(e => _mapper.Map<PluginDto>(e));
+
+
+            return Ok(dtos);
         }
     }
 }

@@ -52,14 +52,16 @@ namespace SKD_Automation
 
             services.AddFluentValidationValidators();
 
-            //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
+            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
 
-            services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
+            //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
 
             services.AddLogging(builder =>
             {
                 builder.AddConsole();
             });
+
+            string key = Configuration.GetConnectionString("automation");
 
 
             services.Configure<JwtAppSettingJson>(Configuration.GetSection("JWT"));

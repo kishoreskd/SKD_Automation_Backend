@@ -25,6 +25,7 @@ namespace AM.Persistence
         }
 
 
+
         public void DetachLocal(List<Plugin> col)
         {
         }
