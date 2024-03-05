@@ -32,12 +32,17 @@ namespace SKD_Automation.Controllers
         private readonly IUnitWorkService _service;
         private readonly IMapper _mapper;
         private readonly IValidator<User> _validator;
+        private readonly IEmailHelper _emailHeler;
 
-        public UserController(IUnitWorkService service, IMapper mapper, IValidator<User> validator)
+
+        public UserController(IUnitWorkService service, IMapper mapper,
+            IValidator<User> validator,
+            IEmailHelper emlHelper)
         {
             _service = service;
             _mapper = mapper;
             _validator = validator;
+            _emailHeler = emlHelper;
         }
 
 
@@ -84,12 +89,17 @@ namespace SKD_Automation.Controllers
                 ErrorMessage = passMsg
             });
 
+            string password = dto.Password;
+
             usr.Password = PasswordHelper.HashPassword(usr.Password);
             usr.CreatedBy = dto.CreatedBy;
             usr.CreatedDate = dto.CreatedDate;
 
             await _service.User.Add(usr);
             await _service.Commit();
+
+            string msg = $"Hi\n See below for your login credentials\n User name: {usr.UserName} \n Password: {password}";
+            _emailHeler.SendMail(usr.Email, "Automation Login Credentials", msg);
 
             return Ok(usr);
         }

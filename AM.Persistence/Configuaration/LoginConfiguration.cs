@@ -22,6 +22,8 @@ namespace RFIM.Persistence.Configuaration
             builder.Property(e => e.Password).IsRequired();
             builder.Property(e => e.Token).HasMaxLength(500);
             builder.Property(e => e.RefreshToken).HasMaxLength(500);
+            builder.Property(e => e.Email).HasMaxLength(100);
+
         }
     }
 

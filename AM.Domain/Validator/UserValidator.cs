@@ -18,6 +18,9 @@ namespace AM.Domain.Validator
             RuleFor(x => x.Password).NotEmpty().WithMessage("Password required!");
 
             RuleFor(x => x.RoleId).NotEmpty().WithMessage("Role required!");
+
+            RuleFor(x => x.Email).NotEmpty().WithMessage("Email address is required").EmailAddress().WithMessage("A valid email is required");
+
         }
     }
 }

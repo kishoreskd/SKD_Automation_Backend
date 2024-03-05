@@ -43,7 +43,6 @@ namespace SKD_Automation
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddJWTTokenAuthentication(Configuration);
 
             services.AddFilterService();
@@ -53,7 +52,6 @@ namespace SKD_Automation
             services.AddFluentValidationValidators();
 
             services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("automation")));
-
             //services.AddDbContext<AutomationDbService>(option => option.UseSqlServer(Configuration.GetConnectionString("lap")));
 
             services.AddLogging(builder =>
@@ -61,18 +59,11 @@ namespace SKD_Automation
                 builder.AddConsole();
             });
 
+
             string key = Configuration.GetConnectionString("automation");
-
-
             services.Configure<JwtAppSettingJson>(Configuration.GetSection("JWT"));
 
-            services.AddScoped<IUnitWorkService, UnitWorkService>();
-
-            services.AddTransient<ITokenHelper, TokenHelper>();
-
-            services.AddAutoMapper(typeof(Program).Assembly);
-
-            //services.AddTransient<AuthenticationMiddleware>();
+            services.AddServicesExt();
 
             services.AddSwaggerGen(c =>
             {
@@ -112,11 +103,25 @@ namespace SKD_Automation
         }
     }
 
+
+
+
     public static class AuthenticationMiddlewareExtension
     {
         public static IApplicationBuilder UserAuthenticationMiddleware(this IApplicationBuilder builder)
         {
             return builder.UseMiddleware<AuthenticationMiddleware>();
+        }
+    }
+
+    public static class AddServicesExtension
+    {
+        public static void AddServicesExt(this IServiceCollection services)
+        {
+            services.AddScoped<IUnitWorkService, UnitWorkService>();
+            services.AddTransient<ITokenHelper, TokenHelper>();
+            services.AddScoped<IEmailHelper, EmailHelper>();
+            services.AddAutoMapper(typeof(Program).Assembly);
         }
     }
 
@@ -131,7 +136,6 @@ namespace SKD_Automation
             service.AddTransient<IValidator<User>, UserValidator>();
         }
     }
-
     public static class JWTTokenAuthenticationExtension
     {
         public static void AddJWTTokenAuthentication(this IServiceCollection service, IConfiguration configuration)
@@ -161,8 +165,6 @@ namespace SKD_Automation
             });
         }
     }
-
-
     public static class FilterExtension
     {
         public static void AddFilterService(this IServiceCollection service)
