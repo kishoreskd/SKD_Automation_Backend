@@ -61,6 +61,7 @@ namespace SKD_Automation
 
 
             string key = Configuration.GetConnectionString("automation");
+
             services.Configure<JwtAppSettingJson>(Configuration.GetSection("JWT"));
 
             services.AddServicesExt();

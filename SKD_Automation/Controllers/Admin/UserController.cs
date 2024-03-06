@@ -155,7 +155,7 @@ namespace SKD_Automation.Controllers
         }
 
         [HttpDelete("delete/{id:int}")]
-        public async Task<IActionResult> DeletePlugin(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             User user = await _service.User.GetFirstOrDefault(e => e.Id.Equals(id));
 
