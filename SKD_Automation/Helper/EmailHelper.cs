@@ -8,24 +8,25 @@ namespace SKD_Automation.Helper
 {
     public interface IEmailHelper
     {
-        bool SendMail(string mailAddress, string subject, string message);
+        bool SendCredentialMail(string mailAddress, string userName, string password);
     }
 
     public class EmailHelper : IEmailHelper
     {
-        public  bool SendMail(string mailAddress, string subject, string message)
+        public bool SendCredentialMail(string mailAddress, string userName, string password)
         {
+            string msg = $"Hi\n\n See below for your login credentials\n\n User name: {userName}\n Password: {password}";
+
             MailMessage mail = new MailMessage();
 
-            string body_Message = "Dear Sir," + Environment.NewLine + Environment.NewLine;
-            body_Message += message + Environment.NewLine;
-
+            string body_Message = $"Dear {userName.ToUpper()}," + Environment.NewLine + Environment.NewLine;
+            body_Message += msg + Environment.NewLine + Environment.NewLine + Environment.NewLine;
 
             body_Message += "Regards " + Environment.NewLine;
             body_Message += "PGT Automation." + Environment.NewLine + Environment.NewLine;
 
 
-            mail.Subject = subject;
+            mail.Subject = "PGT Dashbord Tracker Web Application Login Credentials";
             mail.Body = body_Message;
             mail.From = new MailAddress("pgtautomation@pangulftech.com");
             mail.To.Add(mailAddress);

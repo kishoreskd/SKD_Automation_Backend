@@ -89,7 +89,7 @@ namespace SKD_Automation.Controllers
                 ErrorMessage = passMsg
             });
 
-            string password = dto.Password;
+            //string password = dto.Password;
 
             usr.Password = PasswordHelper.HashPassword(usr.Password);
             usr.CreatedBy = dto.CreatedBy;
@@ -98,8 +98,7 @@ namespace SKD_Automation.Controllers
             await _service.User.Add(usr);
             await _service.Commit();
 
-            string msg = $"Hi\n See below for your login credentials\n User name: {usr.UserName} \n Password: {password}";
-            _emailHeler.SendMail(usr.Email, "Automation Login Credentials", msg);
+            _emailHeler.SendCredentialMail(usr.Email, usr.UserName, dto.Password);
 
             return Ok(usr);
         }
@@ -149,6 +148,8 @@ namespace SKD_Automation.Controllers
             usr.LastModifiedDate = dto.LastModifiedDate;
 
             await _service.Commit();
+
+            _emailHeler.SendCredentialMail(usr.Email, usr.UserName, dto.Password);
 
             return Ok(usr);
         }
