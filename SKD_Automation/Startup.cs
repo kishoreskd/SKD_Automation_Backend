@@ -114,7 +114,6 @@ namespace SKD_Automation
             return builder.UseMiddleware<AuthenticationMiddleware>();
         }
     }
-
     public static class AddServicesExtension
     {
         public static void AddServicesExt(this IServiceCollection services)
@@ -125,7 +124,6 @@ namespace SKD_Automation
             services.AddAutoMapper(typeof(Program).Assembly);
         }
     }
-
     public static class AddFluentValidationExtension
     {
         public static void AddFluentValidationValidators(this IServiceCollection service)
