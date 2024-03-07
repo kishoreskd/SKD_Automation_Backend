@@ -15,7 +15,7 @@ namespace SKD_Automation.Helper
     {
         public bool SendCredentialMail(string mailAddress, string userName, string password)
         {
-            string msg = $"Hi\n\n See below for your login credentials\n\n User name: {userName}\n Password: {password}";
+            string msg = $"Hi\nSee below for your login credentials\n\n User name: {userName}\n Password: {password}";
 
             MailMessage mail = new MailMessage();
 
