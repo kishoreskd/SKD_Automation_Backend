@@ -16,5 +16,11 @@ namespace SKD_Automation.Controllers
         {
             return Content("Hi there");
         }
+
+        [HttpGet("test")]
+        public async Task<IActionResult> Testing()
+        {
+            return Content("Hi there");
+        }
     }
 }

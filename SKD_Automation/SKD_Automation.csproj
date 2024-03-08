@@ -32,4 +32,8 @@
     <ProjectReference Include="..\AM.Utility\AM.Utility.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\NewFolder\" />
+  </ItemGroup>
+
 </Project>

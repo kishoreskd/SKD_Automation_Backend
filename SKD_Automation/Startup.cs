@@ -59,7 +59,6 @@ namespace SKD_Automation
                 builder.AddConsole();
             });
 
-
             string key = Configuration.GetConnectionString("automation");
 
             services.Configure<JwtAppSettingJson>(Configuration.GetSection("JWT"));
@@ -70,6 +69,8 @@ namespace SKD_Automation
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Automation", Version = "v1" });
             });
+
+            services.AddCors();
         }
 
 
@@ -88,8 +89,12 @@ namespace SKD_Automation
 
             app.UseRouting();
 
+
             //It will allow diffent domain can access 
             app.UseCors(m => m.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
+
+            //app.UseCors(m => m.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5012"));
+
 
             app.UserAuthenticationMiddleware();
 
@@ -103,8 +108,6 @@ namespace SKD_Automation
             });
         }
     }
-
-
 
 
     public static class AuthenticationMiddlewareExtension

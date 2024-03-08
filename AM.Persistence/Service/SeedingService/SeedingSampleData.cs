@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,11 +28,12 @@ namespace Am.Persistence.Seeding
             //    return;
             //}
 
-
+            //await SeedRoleAsync(ct);
             //await SeedDepartmentAsync(ct);
-            await SeedPluginAsync(ct);
-            await SeedPluginLogAsync(ct);
-            //await this.SeedRoleAsync(ct);
+            //await SeedUserAsycn(ct);
+            //await SeedPluginAsync(ct);
+            //await SeedPluginLogAsync(ct);
+            await this.SeedRoleAsync(ct);
         }
         public async Task SeedDepartmentAsync(CancellationToken ct)
         {
@@ -46,6 +49,28 @@ namespace Am.Persistence.Seeding
             await _service.Department.AddRange(departmentCol);
             await _service.Commit();
         }
+
+        public async Task SeedUserAsycn(CancellationToken ct)
+        {
+            //var user = new[]
+            //{
+            //   new User{
+            //       UserName = "2701",
+            //       EmployeeId = 2701,
+            //       Email = "sample.com",
+            //       CreatedBy = 2701,
+            //       CreatedDate =DateTime.Now,
+            //       LastModifiedBy= null,
+            //       LastModifiedDate = null,
+            //       Password = PasswordHelperS.HashPassword("KishIndi@345"),
+            //       RoleId = 1
+            //   }
+            //};
+
+            //await _service.User.AddRange(user);
+            //await _service.Commit();
+        }
+
         public async Task SeedPluginAsync(CancellationToken ct)
         {
 
@@ -97,14 +122,15 @@ namespace Am.Persistence.Seeding
         {
             var col = new[]
             {
-                new Role {RoleName = "ADMIN"},
-                new Role {RoleName= "MANAGER"},
-                new Role {RoleName = "TEAMLEAD"},
-                new Role {RoleName = "USER"}
+                //new Role {RoleName = "ADMIN"},
+                //new Role {RoleName= "MANAGER"},
+                //new Role {RoleName = "TEAMLEAD"},
+                //new Role {RoleName = "USER"},
+                new Role {RoleName = "SUPER ADMIN"}
             };
 
             await _service.Role.AddRange(col);
             await _service.Commit();
         }
-    }
+    }  
 }

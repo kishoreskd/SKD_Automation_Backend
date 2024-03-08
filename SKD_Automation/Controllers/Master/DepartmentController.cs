@@ -19,8 +19,8 @@ using AM.Application.Exceptions;
 
 namespace SKD_Automation.Controllers
 {
-    [ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
-    [Authorize]
+    //[ServiceFilter(typeof(HeaderAuthorizationFilterForLogin))]
+    //[Authorize]
     [ApiController]
     [Route("[controller]")]
     public class DepartmentController : ControllerBase
@@ -39,18 +39,26 @@ namespace SKD_Automation.Controllers
         [HttpGet("get_all")]
         public async Task<IActionResult> GetAll()
         {
-            //SeedingSampleData d = new SeedingSampleData(_service);
-            //await d.SeedAllAsync();
-
-
-            IEnumerable<Department> departmentCol = await _service.Department.GetAll();
-
-            if (!COM.IsAny(departmentCol))
+            try
             {
-                return NotFound();
-            }
+                //SeedingSampleData d = new SeedingSampleData(_service);
+                //await d.SeedAllAsync();
 
-            return Ok(departmentCol);
+
+                IEnumerable<Department> departmentCol = await _service.Department.GetAll();
+
+                if (!COM.IsAny(departmentCol))
+                {
+                    return NotFound();
+                }
+
+                return Ok(departmentCol);
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
 
         }
 
