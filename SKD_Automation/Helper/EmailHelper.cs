@@ -31,15 +31,15 @@ namespace SKD_Automation.Helper
             mail.From = new MailAddress("pgtautomation@pangulftech.com");
             mail.To.Add(mailAddress);
 
-            SmtpClient SmtpServer = new SmtpClient("smtp.office365.com");
-            SmtpServer.UseDefaultCredentials = false;
-            SmtpServer.Port = 587;
-            SmtpServer.Credentials = new System.Net.NetworkCredential("pgtautomation@pangulftech.com", "Aut0m@t3");
-            SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
-            SmtpServer.TargetName = "STARTTLS/smtp.office365.com";
-            SmtpServer.EnableSsl = true;
+            //SmtpClient SmtpServer = new SmtpClient("smtp.office365.com");
+            //SmtpServer.UseDefaultCredentials = false;
+            //SmtpServer.Port = 587;
+            //SmtpServer.Credentials = new System.Net.NetworkCredential("pgtautomation@pangulftech.com", "Aut0m@t3");
+            //SmtpServer.DeliveryMethod = SmtpDeliveryMethod.Network;
+            //SmtpServer.TargetName = "STARTTLS/smtp.office365.com";
+            //SmtpServer.EnableSsl = true;
 
-            SmtpServer.SendAsync(mail, default);
+            //SmtpServer.SendAsync(mail, default);
             return true;
         }
     }

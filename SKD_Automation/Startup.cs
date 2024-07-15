@@ -147,7 +147,6 @@ namespace SKD_Automation
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-
             })
             .AddJwtBearer(x =>
             {

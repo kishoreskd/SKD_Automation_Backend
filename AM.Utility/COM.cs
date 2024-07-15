@@ -7,18 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 //using System.Windows.Forms;
 using System.Drawing;
-
 using System.Reflection;
-
-
-
-
-
 using System.Collections;
 using Newtonsoft.Json;
-
-//namespace RFIM.Utility
-
 
 public static class SettingsKey
 {
@@ -36,19 +27,16 @@ public static class SettingsKey
     public const string _tekla_version = "tekla_version";
 }
 
-
 public static class FileExtension
 {
     public const string Jpg = ".jpg";
     public const string Pdf = ".pdf";
 }
 
-
 public class COM
 {
 
     #region Math
-
     public static int GenerateRandomNo()
     {
         int _min = 1000;
@@ -74,12 +62,10 @@ public class COM
         return $"{letter1}{letter2}{letter3}";
     }
     public static double Percent(double percent, double val) => val * percent / 100;
-
     #endregion
 
     #region Valid Check
     public static bool IsValidID(int? num) => num != null && num > 0 ? true : false;
-
     public static bool IsNull<T>(T obj) where T : class
     {
         if (obj is null) return true;
@@ -90,46 +76,37 @@ public class COM
         return data != null && data.Any();
     }
     public static bool IsNullOrEmpty(string str) => string.IsNullOrEmpty(str) ? true : false;
-
     public static bool IsValidCount(int? count)
     {
         if (count == null) return false;
         return count > 0;
     }
-
     #endregion
 
     #region FilesOperation
-
     public static bool IsFileExist(string fileName) => System.IO.File.Exists(fileName) ? true : false;
     public static void FileDelete(string fileName) => File.Delete(fileName);
     public static void CopyTo(string fileName, string destination) => File.Copy(fileName, destination);
     public static string PathCombine(string fn1, string fn2) => Path.Combine(fn1, fn2);
-
     #endregion
 
     #region DateTime
-
     public const string DateTimeFormat = "MM/dd/yyyy HH:mm:ss";
-
     public static DateTime GetFormatedDate(DateTime date)
     {
         date = DateTime.ParseExact(date.ToString("dd/MM/yyyy"), "dd/MM/yyyy", null);
         return date;
     }
-
     public static DateTime GetFormatedDate(string date)
     {
         DateTime dt = DateTime.ParseExact(date, "dd/MM/yyyy", null);
         return dt;
     }
-
     public static string GetCusomizedDate(string date)
     {
         DateTime dt = DateTime.ParseExact(date, "dd/MM/yyyy", null);
         return dt.ToString("yyyy-MM-dd");
     }
-
     public static DateTime GetFormatedDateWithTime(string date)
     {
         //DateTime dateTime = Convert.ToDateTime(date);
@@ -138,19 +115,14 @@ public class COM
         //DateTime dt = DateTime.ParseExact(date, "dd/MM/yyyy tt:hh:ss", null);
         //return dt;
     }
-
     public static DateTime GetUtcToLocal() => DateTime.UtcNow.ToLocalTime();
-
-
-
-
     #endregion
+
 
     #region Conversion
-
     public static double ToDouble(string val) => Convert.ToDouble(val);
-
     #endregion
+
 
     #region Reflection
     public static object GetProppertyValue(object obj, string propertyName)
@@ -196,7 +168,6 @@ public class COM
         }
         return null;
     }
-
     #endregion
 
 
@@ -211,8 +182,6 @@ public class COM
             throw;
         }
     }
-
-
     public static class Path
     {
         public static string Combine(string directory, string fileName)
@@ -226,7 +195,6 @@ public class COM
             return path;
         }
     }
-
     public class Json
     {
         public static string SerializeObject<T>(T obj) where T : class => JsonConvert.SerializeObject(obj);

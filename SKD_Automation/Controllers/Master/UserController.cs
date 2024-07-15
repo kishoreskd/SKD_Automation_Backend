@@ -35,9 +35,7 @@ namespace SKD_Automation.Controllers
         private readonly IEmailHelper _emailHeler;
 
 
-        public UserController(IUnitWorkService service, IMapper mapper,
-            IValidator<User> validator,
-            IEmailHelper emlHelper)
+        public UserController(IUnitWorkService service, IMapper mapper, IValidator<User> validator, IEmailHelper emlHelper)
         {
             _service = service;
             _mapper = mapper;

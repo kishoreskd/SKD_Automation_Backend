@@ -12,7 +12,7 @@ using AM.Persistence;
 
 namespace Am.Persistence.Seeding
 {
-    public class SeedingSampleData
+    public partial class SeedingSampleData
     {
         public IUnitWorkService _service;
 
@@ -28,12 +28,14 @@ namespace Am.Persistence.Seeding
             //    return;
             //}
 
-            //await SeedRoleAsync(ct);
+            //await SeedRoleAsync(ct);0
             //await SeedDepartmentAsync(ct);
             //await SeedUserAsycn(ct);
             //await SeedPluginAsync(ct);
             //await SeedPluginLogAsync(ct);
-            await this.SeedRoleAsync(ct);
+            //await this.SeedRoleAsync(ct);
+            await this.SeedModuleAsync(ct);
+            await this.SeedUserPreviledgeModule(ct);
         }
         public async Task SeedDepartmentAsync(CancellationToken ct)
         {
@@ -132,5 +134,6 @@ namespace Am.Persistence.Seeding
             await _service.Role.AddRange(col);
             await _service.Commit();
         }
-    }  
+
+    }
 }

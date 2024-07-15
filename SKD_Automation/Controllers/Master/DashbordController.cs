@@ -61,7 +61,6 @@ namespace SKD_Automation.Controllers
         //}
 
         [HttpGet("dashbord/{departmentid}")]
-
         public async Task<IActionResult> GetAll(int departmentid)
         {
             var data = _service.Plugin.GetIQueryable(e => e.DepartmentId.Equals(departmentid),

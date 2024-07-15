@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-using System.ComponentModel.DataAnnotations.Schema;
+﻿    using AM.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using AM.Domain.Entities;
 
 namespace RFIM.Persistence.Configuaration
 {

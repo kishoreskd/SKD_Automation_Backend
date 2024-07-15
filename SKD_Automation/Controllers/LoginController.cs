@@ -36,11 +36,17 @@ namespace SKD_Automation.Controllers
             _mapper = mapper;
             _validator = validator;
             _tokenHelper = tokenHelper;
+
+
+
         }
 
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(LoginDto obj)
         {
+            //SeedingSampleData seed = new SeedingSampleData(_service);
+            //await seed.SeedAllAsync();
+
             if (COM.IsNull(obj)) return BadRequest(new ApiError { ErrorCode = 400, ErrorMessage = "Login details can't be null" });
 
             User user = await _service.User.GetFirstOrDefault(e => e.UserName.Equals(obj.UserName), noTracking: false, includeProp: $"{nameof(AM.Domain.Entities.User.Role)}");

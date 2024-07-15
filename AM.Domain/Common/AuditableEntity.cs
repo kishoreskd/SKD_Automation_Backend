@@ -14,7 +14,6 @@ namespace AM.Domain
         public int? LastModifiedBy { get; set; }
         public DateTime? LastModifiedDate { get; set; }
 
-
         [Timestamp]
         public byte[] TimeStamp { get; set; }
     }

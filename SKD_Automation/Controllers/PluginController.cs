@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
 using AM.Domain.Entities;
 using AM.Persistence;
 using AutoMapper;
@@ -335,11 +334,6 @@ namespace SKD_Automation.Controllers
                     PluginName = data.Plugin.PluginName
                 });
             }
-
-
-            //IEnumerable<PluginDto> dtos = plugins.Select(e => _mapper.Map<PluginDto>(e));
-
-
             return Ok(dtos);
         }
     }

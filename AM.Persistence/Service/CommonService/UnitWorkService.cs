@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using AM.Domain;
+using AM.Domain.Entities;
 
 namespace AM.Persistence
 {
@@ -25,6 +26,8 @@ namespace AM.Persistence
         public IPluginLogService PluginLog { get { return new PluginLogService(this._service); } }
         public IUserService User { get { return new UserService(this._service); } }
         public IRoleService Role { get { return new RoleService(this._service); } }
+        public IModuleService Module { get { return new ModuleService(this._service); } }
+        public IUserModulePrivilegeService UserModulePrivilege { get { return new UserModulePrivilegeService(this._service); } }
 
         public async Task<int> Commit(CancellationToken cancellationToken = new CancellationToken())
         {

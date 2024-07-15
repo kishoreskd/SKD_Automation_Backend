@@ -110,7 +110,8 @@ namespace AM.Persistence
             //await this._service.DisposeAsync();
         }
         public async Task AddRange(IEnumerable<T> entity, CancellationToken cancelationToken = default) => await _dbSet.AddRangeAsync(entity, cancelationToken);
-        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter, string inCludePropperties = null, bool noTracking = true, CancellationToken cancelationToken = default)
+        public async Task<T> GetFirstOrDefault(Expression<Func<T, bool>> filter, string inCludePropperties = null, bool noTracking = true,
+            CancellationToken cancelationToken = default)
         {
             IQueryable<T> query = null;
 
@@ -131,7 +132,8 @@ namespace AM.Persistence
 
             return await query.FirstOrDefaultAsync(cancelationToken);
         }
-        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null, string includeEntities = null, bool noTracking = true, CancellationToken cancelationToken = default)
+        public async Task<IEnumerable<T>> GetAll(Expression<Func<T, bool>> filter = null, string includeEntities = null, bool noTracking = true,
+            CancellationToken cancelationToken = default)
         {
             IQueryable<T> query;
 
@@ -160,7 +162,8 @@ namespace AM.Persistence
 
             return await query.ToListAsync(cancelationToken);
         }
-        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null, string includeEntities = null, bool noTracking = true, CancellationToken cancelationToken = default)
+        public async Task<IEnumerable<T>> Get(Expression<Func<T, bool>> filter = null, string includeEntities = null, bool noTracking = true, 
+            CancellationToken cancelationToken = default)
         {
             IQueryable<T> query;
 
@@ -190,12 +193,11 @@ namespace AM.Persistence
             return await query.ToListAsync(cancelationToken);
         }
 
-        public async Task<bool> IsAnyAsync(Expression<Func<T, bool>> filter, string includeProp = null, bool noTracking = true, CancellationToken cancelationToken = default)
+        public async Task<bool> IsAnyAsync(Expression<Func<T, bool>> filter, string includeProp = null, bool noTracking = true, 
+            CancellationToken cancelationToken = default)
         {
             return await _dbSet.AnyAsync(filter);
         }
-
-
 
         #endregion
 
@@ -242,7 +244,8 @@ namespace AM.Persistence
             return query.AsNoTracking();
         }
 
-        public IQueryable<T> GetFirstOrDefaultIQuery(Expression<Func<T, bool>> filter, string inCludePropperties = null, bool noTracking = true, CancellationToken cancelationToken = default)
+        public IQueryable<T> GetFirstOrDefaultIQuery(Expression<Func<T, bool>> filter, string inCludePropperties = null, bool noTracking = true,
+            CancellationToken cancelationToken = default)
         {
             IQueryable<T> query = null;
 
